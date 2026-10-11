@@ -8,9 +8,10 @@ import '../../../core/utils/ui_helpers.dart';
 import '../../../core/widgets/curved_bottom_nav_bar.dart';
 import '../../../core/widgets/custom_primary_button.dart';
 import '../../auth/bloc/auth_bloc.dart';
-import '../../auth/bloc/auth_event.dart';
+import '../../auth/bloc/auth_state.dart';
 import '../../auth/models/auth_user.dart';
 import '../../cart/bloc/cart_bloc.dart';
+import '../../cart/bloc/cart_event.dart';
 import '../../cart/bloc/cart_state.dart';
 import '../../cart/screens/cart_screen.dart';
 import '../../favorites/screens/favorites_screen.dart';
@@ -23,7 +24,9 @@ import '../widgets/banner_carousel.dart';
 import '../widgets/best_seller_section.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/home_header.dart';
+import '../../auth/screens/login_screen.dart';
 import '../widgets/order_history_sheet.dart';
+import '../widgets/profile_sheet.dart';
 import '../widgets/recipe_card.dart';
 import '../widgets/recipe_shimmer.dart';
 import '../widgets/sort_bottom_sheet.dart';
@@ -67,10 +70,21 @@ class _HomeViewState extends State<_HomeView> {
   final ScrollController _scrollController = ScrollController();
   int _bottomNavIndex = 0;
 
+  String _getUserKey(AuthUser user) {
+    if (user.username.isNotEmpty) return user.username.toLowerCase();
+    if (user.id > 0) return 'user_${user.id}';
+    if (user.email.isNotEmpty) return user.email.toLowerCase();
+    return 'default_user';
+  }
+
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+
+    final userKey = _getUserKey(widget.user);
+    context.read<CartBloc>().add(LoadCartEvent(userId: userKey));
+    context.read<HomeBloc>().add(LoadFavoritesForUserEvent(userKey));
   }
 
   @override
@@ -140,36 +154,8 @@ class _HomeViewState extends State<_HomeView> {
     );
   }
 
-  void _showProfileDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(widget.user.fullName, style: AppTextStyles.fieldLabel),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Email: ${widget.user.email}', style: AppTextStyles.bodySubtitle),
-            const SizedBox(height: 4),
-            Text('Username: @${widget.user.username}', style: AppTextStyles.bodySubtitle),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              context.read<AuthBloc>().add(const LogoutRequestedEvent());
-            },
-            child: const Text('Sign Out', style: TextStyle(color: Colors.red)),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
+  void _openProfile() {
+    ProfileSheet.show(context, user: widget.user);
   }
 
   void _openOrderHistory() {
@@ -218,8 +204,17 @@ class _HomeViewState extends State<_HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Column(
-        children: [
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, authState) {
+          if (authState is UnauthenticatedState) {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+              (route) => false,
+            );
+          }
+        },
+        child: Column(
+          children: [
             BlocBuilder<CartBloc, CartState>(
               builder: (context, cartState) {
                 return HomeHeader(
@@ -234,7 +229,7 @@ class _HomeViewState extends State<_HomeView> {
                     context,
                     message: 'No new notifications',
                   ),
-                  onProfileTap: () => _showProfileDialog(context),
+                  onProfileTap: _openProfile,
                 );
               },
             ),
@@ -435,6 +430,7 @@ class _HomeViewState extends State<_HomeView> {
             ),
           ],
         ),
+      ),
       bottomNavigationBar: CurvedBottomNavBar(
         selectedIndex: _bottomNavIndex,
         onItemTapped: _onBottomNavTapped,

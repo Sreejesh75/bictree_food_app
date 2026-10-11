@@ -7,7 +7,8 @@ import 'home_event.dart';
 import 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  static const String _favStorageKey = 'bictree_persisted_favorites_v1';
+  static const String _defaultFavStorageKey = 'bictree_persisted_favorites_v1';
+  String? _activeUserId;
   final RecipeRepository repository;
 
   HomeBloc({required this.repository}) : super(const HomeState()) {
@@ -19,6 +20,16 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<SortRecipesEvent>(_onSort);
     on<ToggleFavoriteEvent>(_onToggleFavorite);
     on<ClearFavoritesEvent>(_onClearFavorites);
+    on<LoadFavoritesForUserEvent>(_onLoadFavoritesForUser);
+    on<SaveAndClearFavoritesEvent>(_onSaveAndClearFavorites);
+  }
+
+  String _getFavStorageKey([String? userId]) {
+    final id = userId ?? _activeUserId;
+    if (id != null && id.isNotEmpty) {
+      return 'bictree_favs_user_$id';
+    }
+    return _defaultFavStorageKey;
   }
 
   List<RecipeModel> _applySort(List<RecipeModel> items, SortOption option) {
@@ -43,7 +54,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<List<RecipeModel>> _loadFavoritesFromStorage() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(_favStorageKey);
+      final key = _getFavStorageKey();
+      final raw = prefs.getString(key);
       if (raw != null && raw.isNotEmpty) {
         final decoded = jsonDecode(raw) as List<dynamic>;
         return decoded
@@ -58,7 +70,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final prefs = await SharedPreferences.getInstance();
       final encoded = jsonEncode(favorites.map((r) => r.toJson()).toList());
-      await prefs.setString(_favStorageKey, encoded);
+      await prefs.setString(_getFavStorageKey(), encoded);
     } catch (_) {}
   }
 
@@ -66,6 +78,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     FetchInitialRecipesEvent event,
     Emitter<HomeState> emit,
   ) async {
+    if (event.userId != null) {
+      _activeUserId = event.userId;
+    }
     emit(state.copyWith(status: HomeStatus.loading, errorMessage: null));
     try {
       final savedFavorites = await _loadFavoritesFromStorage();
@@ -330,5 +345,47 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ));
 
     await _saveFavoritesToStorage(const []);
+  }
+
+  Future<void> _onLoadFavoritesForUser(
+    LoadFavoritesForUserEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    _activeUserId = event.userId;
+    final savedFavorites = await _loadFavoritesFromStorage();
+
+    final updatedRecipes = state.recipes.map((r) {
+      final isFav = savedFavorites.any((fav) => fav.id == r.id);
+      return r.copyWith(isFavorite: isFav);
+    }).toList();
+
+    final updatedBestSellers = state.bestSellers.map((r) {
+      final isFav = savedFavorites.any((fav) => fav.id == r.id);
+      return r.copyWith(isFavorite: isFav);
+    }).toList();
+
+    emit(state.copyWith(
+      favorites: savedFavorites,
+      recipes: updatedRecipes,
+      bestSellers: updatedBestSellers,
+    ));
+  }
+
+  Future<void> _onSaveAndClearFavorites(
+    SaveAndClearFavoritesEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    await _saveFavoritesToStorage(state.favorites);
+
+    final clearedRecipes = state.recipes.map((r) => r.copyWith(isFavorite: false)).toList();
+    final clearedBestSellers = state.bestSellers.map((r) => r.copyWith(isFavorite: false)).toList();
+
+    emit(state.copyWith(
+      favorites: const [],
+      recipes: clearedRecipes,
+      bestSellers: clearedBestSellers,
+    ));
+
+    _activeUserId = null;
   }
 }

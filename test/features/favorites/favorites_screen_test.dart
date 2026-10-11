@@ -11,8 +11,26 @@ import 'package:bictree_food_app/core/widgets/curved_bottom_nav_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:bictree_food_app/features/home/models/recipe_model.dart';
 import 'package:bictree_food_app/features/home/screens/home_screen.dart';
+import 'package:bictree_food_app/features/auth/bloc/auth_bloc.dart';
+import 'package:bictree_food_app/features/auth/repository/auth_repository.dart';
+import 'package:bictree_food_app/core/storage/secure_storage_service.dart';
 import 'package:bictree_food_app/features/auth/models/auth_user.dart';
 import 'package:http/http.dart' as http;
+
+class MockStorage extends SecureStorageService {
+  @override
+  Future<String?> getAccessToken() async => null;
+  @override
+  Future<String?> getUserData() async => null;
+  @override
+  Future<void> clearSession() async {}
+}
+
+class FakeAuthRepo extends AuthRepository {
+  FakeAuthRepo() : super(storageService: MockStorage());
+  @override
+  Future<void> logout() async {}
+}
 
 class FakeRecipeRepo extends RecipeRepository {
   FakeRecipeRepo() : super(httpClient: http.Client());
@@ -128,12 +146,14 @@ void main() {
 
     testWidgets('3. Navigation - Tapping favorites in HomeScreen pushes FavoritesScreen without provider error',
         (tester) async {
+      final authBloc = AuthBloc(repository: FakeAuthRepo());
       final homeBloc = HomeBloc(repository: FakeRecipeRepo());
       final cartBloc = CartBloc();
 
       await tester.pumpWidget(
         MultiBlocProvider(
           providers: [
+            BlocProvider<AuthBloc>.value(value: authBloc),
             BlocProvider<HomeBloc>.value(value: homeBloc),
             BlocProvider<CartBloc>.value(value: cartBloc),
           ],

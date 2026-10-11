@@ -151,5 +151,33 @@ void main() {
         emits(predicate<dynamic>((state) => state.items.isEmpty)),
       );
     });
+
+    test('7. Per-User Persistence - Saves items for user A, clears on signout, and restores on signin', () async {
+      final emilyBloc = CartBloc();
+      emilyBloc.add(const LoadCartEvent(userId: 'emilys'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+
+      emilyBloc.add(AddToCartEvent(recipe: testRecipe, quantity: 2));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(emilyBloc.state.items.length, 1);
+
+      // Emily signs out: saves and clears in-memory cart
+      emilyBloc.add(const SaveAndClearCartEvent());
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(emilyBloc.state.items, isEmpty);
+
+      // Another user logs in (john)
+      final johnBloc = CartBloc();
+      johnBloc.add(const LoadCartEvent(userId: 'john'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(johnBloc.state.items, isEmpty);
+
+      // Emily logs back in with same credentials
+      final emilyRestoredBloc = CartBloc();
+      emilyRestoredBloc.add(const LoadCartEvent(userId: 'emilys'));
+      await Future<void>.delayed(const Duration(milliseconds: 50));
+      expect(emilyRestoredBloc.state.items.length, 1);
+      expect(emilyRestoredBloc.state.items.first.quantity, 2);
+    });
   });
 }

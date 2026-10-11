@@ -10,7 +10,16 @@ abstract class CartEvent extends Equatable {
 }
 
 class LoadCartEvent extends CartEvent {
-  const LoadCartEvent();
+  final String? userId;
+
+  const LoadCartEvent({this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
+
+class SaveAndClearCartEvent extends CartEvent {
+  const SaveAndClearCartEvent();
 }
 
 class AddToCartEvent extends CartEvent {

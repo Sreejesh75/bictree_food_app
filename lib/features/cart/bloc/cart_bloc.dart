@@ -6,7 +6,8 @@ import 'cart_event.dart';
 import 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
-  static const String _storageKey = 'bictree_persisted_cart_v1';
+  static const String _defaultStorageKey = 'bictree_persisted_cart_v1';
+  String? _activeUserId;
 
   CartBloc() : super(const CartState()) {
     on<LoadCartEvent>(_onLoadCart);
@@ -15,16 +16,29 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<RemoveFromCartEvent>(_onRemoveFromCart);
     on<RestoreCartItemEvent>(_onRestoreCartItem);
     on<ClearCartEvent>(_onClearCart);
+    on<SaveAndClearCartEvent>(_onSaveAndClearCart);
+  }
+
+  String _getStorageKey([String? userId]) {
+    final id = userId ?? _activeUserId;
+    if (id != null && id.isNotEmpty) {
+      return 'bictree_cart_user_$id';
+    }
+    return _defaultStorageKey;
   }
 
   Future<void> _onLoadCart(
     LoadCartEvent event,
     Emitter<CartState> emit,
   ) async {
+    if (event.userId != null) {
+      _activeUserId = event.userId;
+    }
     emit(state.copyWith(isLoading: true));
     try {
       final prefs = await SharedPreferences.getInstance();
-      final raw = prefs.getString(_storageKey);
+      final key = _getStorageKey();
+      final raw = prefs.getString(key);
       if (raw != null && raw.isNotEmpty) {
         final decoded = jsonDecode(raw) as List<dynamic>;
         final items = decoded
@@ -120,11 +134,20 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     await _saveToStorage(const []);
   }
 
+  Future<void> _onSaveAndClearCart(
+    SaveAndClearCartEvent event,
+    Emitter<CartState> emit,
+  ) async {
+    await _saveToStorage(state.items);
+    emit(state.copyWith(items: const []));
+    _activeUserId = null;
+  }
+
   Future<void> _saveToStorage(List<CartItem> items) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final encoded = jsonEncode(items.map((i) => i.toJson()).toList());
-      await prefs.setString(_storageKey, encoded);
+      await prefs.setString(_getStorageKey(), encoded);
     } catch (_) {}
   }
 }

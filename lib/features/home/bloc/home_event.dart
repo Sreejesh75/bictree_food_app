@@ -16,7 +16,12 @@ abstract class HomeEvent extends Equatable {
 }
 
 class FetchInitialRecipesEvent extends HomeEvent {
-  const FetchInitialRecipesEvent();
+  final String? userId;
+
+  const FetchInitialRecipesEvent({this.userId});
+
+  @override
+  List<Object?> get props => [userId];
 }
 
 class RefreshRecipesEvent extends HomeEvent {
@@ -66,4 +71,17 @@ class ToggleFavoriteEvent extends HomeEvent {
 
 class ClearFavoritesEvent extends HomeEvent {
   const ClearFavoritesEvent();
+}
+
+class LoadFavoritesForUserEvent extends HomeEvent {
+  final String userId;
+
+  const LoadFavoritesForUserEvent(this.userId);
+
+  @override
+  List<Object?> get props => [userId];
+}
+
+class SaveAndClearFavoritesEvent extends HomeEvent {
+  const SaveAndClearFavoritesEvent();
 }
