@@ -102,7 +102,7 @@ class RecipeModel extends Equatable {
       price: json['price'] != null
           ? (json['price'] as num).toDouble()
           : double.parse(rawPrice.toStringAsFixed(1)),
-      isFavorite: false,
+      isFavorite: json['isFavorite'] as bool? ?? false,
     );
   }
 

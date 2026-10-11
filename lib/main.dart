@@ -11,6 +11,9 @@ import 'features/auth/repository/auth_repository.dart';
 import 'features/auth/screens/login_screen.dart';
 import 'features/cart/bloc/cart_bloc.dart';
 import 'features/cart/bloc/cart_event.dart';
+import 'features/home/bloc/home_bloc.dart';
+import 'features/home/bloc/home_event.dart';
+import 'features/home/repository/recipe_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,14 +35,18 @@ void main() async {
 
 class BictreeFoodApp extends StatelessWidget {
   final AuthRepository authRepository;
+  final RecipeRepository? recipeRepository;
 
   const BictreeFoodApp({
     super.key,
     required this.authRepository,
+    this.recipeRepository,
   });
 
   @override
   Widget build(BuildContext context) {
+    final effectiveRecipeRepo = recipeRepository ?? RecipeRepository();
+
     return RepositoryProvider<AuthRepository>.value(
       value: authRepository,
       child: MultiBlocProvider(
@@ -51,6 +58,11 @@ class BictreeFoodApp extends StatelessWidget {
           ),
           BlocProvider<CartBloc>(
             create: (context) => CartBloc()..add(const LoadCartEvent()),
+          ),
+          BlocProvider<HomeBloc>(
+            create: (context) => HomeBloc(
+              repository: effectiveRecipeRepo,
+            )..add(const FetchInitialRecipesEvent()),
           ),
         ],
         child: MaterialApp(

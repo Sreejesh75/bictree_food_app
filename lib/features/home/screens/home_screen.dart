@@ -13,6 +13,7 @@ import '../../auth/models/auth_user.dart';
 import '../../cart/bloc/cart_bloc.dart';
 import '../../cart/bloc/cart_state.dart';
 import '../../cart/screens/cart_screen.dart';
+import '../../favorites/screens/favorites_screen.dart';
 import '../bloc/home_bloc.dart';
 import '../bloc/home_event.dart';
 import '../bloc/home_state.dart';
@@ -37,12 +38,17 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeBloc>(
-      create: (context) => HomeBloc(
-        repository: RecipeRepository(),
-      )..add(const FetchInitialRecipesEvent()),
-      child: _HomeView(user: user),
-    );
+    try {
+      context.read<HomeBloc>();
+      return _HomeView(user: user);
+    } catch (_) {
+      return BlocProvider<HomeBloc>(
+        create: (context) => HomeBloc(
+          repository: RecipeRepository(),
+        )..add(const FetchInitialRecipesEvent()),
+        child: _HomeView(user: user),
+      );
+    }
   }
 }
 
@@ -80,12 +86,16 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   void _openRecipeDetail(RecipeModel recipe, String heroTag) {
+    final homeBloc = context.read<HomeBloc>();
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => RecipeDetailScreen(
-          recipe: recipe,
-          heroTag: heroTag,
+        builder: (_) => BlocProvider.value(
+          value: homeBloc,
+          child: RecipeDetailScreen(
+            recipe: recipe,
+            heroTag: heroTag,
+          ),
         ),
       ),
     );
@@ -97,7 +107,24 @@ class _HomeViewState extends State<_HomeView> {
       MaterialPageRoute(
         builder: (_) => const CartScreen(),
       ),
-    );
+    ).then((_) {
+      if (mounted) setState(() => _bottomNavIndex = 0);
+    });
+  }
+
+  void _openFavorites() {
+    final homeBloc = context.read<HomeBloc>();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: homeBloc,
+          child: const FavoritesScreen(),
+        ),
+      ),
+    ).then((_) {
+      if (mounted) setState(() => _bottomNavIndex = 0);
+    });
   }
 
   void _showSortSheet(BuildContext context) {
@@ -162,7 +189,7 @@ class _HomeViewState extends State<_HomeView> {
         _openCart();
         break;
       case 2:
-        UIHelpers.showSnackBar(context, message: 'Tap on any heart icon to add favorite dishes');
+        _openFavorites();
         break;
       case 3:
         _showProfileDialog(context);

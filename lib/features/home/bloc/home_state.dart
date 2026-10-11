@@ -8,6 +8,7 @@ class HomeState extends Equatable {
   final HomeStatus status;
   final List<RecipeModel> recipes;
   final List<RecipeModel> bestSellers;
+  final List<RecipeModel> favorites;
   final String selectedCategory;
   final String searchQuery;
   final SortOption selectedSort;
@@ -20,6 +21,7 @@ class HomeState extends Equatable {
     this.status = HomeStatus.initial,
     this.recipes = const [],
     this.bestSellers = const [],
+    this.favorites = const [],
     this.selectedCategory = 'All',
     this.searchQuery = '',
     this.selectedSort = SortOption.ratingHighToLow,
@@ -29,10 +31,13 @@ class HomeState extends Equatable {
     this.errorMessage,
   });
 
+  int get totalFavoritesCount => favorites.length;
+
   HomeState copyWith({
     HomeStatus? status,
     List<RecipeModel>? recipes,
     List<RecipeModel>? bestSellers,
+    List<RecipeModel>? favorites,
     String? selectedCategory,
     String? searchQuery,
     SortOption? selectedSort,
@@ -45,6 +50,7 @@ class HomeState extends Equatable {
       status: status ?? this.status,
       recipes: recipes ?? this.recipes,
       bestSellers: bestSellers ?? this.bestSellers,
+      favorites: favorites ?? this.favorites,
       selectedCategory: selectedCategory ?? this.selectedCategory,
       searchQuery: searchQuery ?? this.searchQuery,
       selectedSort: selectedSort ?? this.selectedSort,
@@ -60,6 +66,7 @@ class HomeState extends Equatable {
         status,
         recipes,
         bestSellers,
+        favorites,
         selectedCategory,
         searchQuery,
         selectedSort,

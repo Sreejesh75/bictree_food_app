@@ -52,7 +52,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
   void _toggleFavorite() {
     setState(() => _isFavorite = !_isFavorite);
     try {
-      context.read<HomeBloc>().add(ToggleFavoriteEvent(widget.recipe.id));
+      context.read<HomeBloc>().add(
+            ToggleFavoriteEvent(widget.recipe.id, recipe: widget.recipe),
+          );
     } catch (_) {}
   }
 

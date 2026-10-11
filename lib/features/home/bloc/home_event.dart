@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../models/recipe_model.dart';
 
 enum SortOption {
   ratingHighToLow,
@@ -55,9 +56,14 @@ class SortRecipesEvent extends HomeEvent {
 
 class ToggleFavoriteEvent extends HomeEvent {
   final int recipeId;
+  final RecipeModel? recipe;
 
-  const ToggleFavoriteEvent(this.recipeId);
+  const ToggleFavoriteEvent(this.recipeId, {this.recipe});
 
   @override
-  List<Object?> get props => [recipeId];
+  List<Object?> get props => [recipeId, recipe];
+}
+
+class ClearFavoritesEvent extends HomeEvent {
+  const ClearFavoritesEvent();
 }
