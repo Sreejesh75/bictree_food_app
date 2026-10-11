@@ -23,9 +23,11 @@ import '../widgets/banner_carousel.dart';
 import '../widgets/best_seller_section.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/home_header.dart';
+import '../widgets/order_history_sheet.dart';
 import '../widgets/recipe_card.dart';
 import '../widgets/recipe_shimmer.dart';
 import '../widgets/sort_bottom_sheet.dart';
+import '../widgets/support_concierge_sheet.dart';
 import 'recipe_detail_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -170,6 +172,18 @@ class _HomeViewState extends State<_HomeView> {
     );
   }
 
+  void _openOrderHistory() {
+    OrderHistorySheet.show(context).then((_) {
+      if (mounted) setState(() => _bottomNavIndex = 0);
+    });
+  }
+
+  void _openSupportConcierge() {
+    SupportConciergeSheet.show(context).then((_) {
+      if (mounted) setState(() => _bottomNavIndex = 0);
+    });
+  }
+
   void _onBottomNavTapped(int index) {
     setState(() {
       _bottomNavIndex = index;
@@ -192,7 +206,10 @@ class _HomeViewState extends State<_HomeView> {
         _openFavorites();
         break;
       case 3:
-        _showProfileDialog(context);
+        _openOrderHistory();
+        break;
+      case 4:
+        _openSupportConcierge();
         break;
     }
   }
