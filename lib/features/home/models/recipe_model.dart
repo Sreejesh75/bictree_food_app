@@ -99,7 +99,9 @@ class RecipeModel extends Equatable {
               ?.map((e) => e.toString())
               .toList() ??
           [],
-      price: double.parse(rawPrice.toStringAsFixed(1)),
+      price: json['price'] != null
+          ? (json['price'] as num).toDouble()
+          : double.parse(rawPrice.toStringAsFixed(1)),
       isFavorite: false,
     );
   }

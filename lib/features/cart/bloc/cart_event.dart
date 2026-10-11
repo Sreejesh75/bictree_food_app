@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import '../../home/models/recipe_model.dart';
+import '../models/cart_item.dart';
 
 abstract class CartEvent extends Equatable {
   const CartEvent();
@@ -45,6 +46,19 @@ class RemoveFromCartEvent extends CartEvent {
 
   @override
   List<Object?> get props => [recipeId];
+}
+
+class RestoreCartItemEvent extends CartEvent {
+  final CartItem item;
+  final int? index;
+
+  const RestoreCartItemEvent({
+    required this.item,
+    this.index,
+  });
+
+  @override
+  List<Object?> get props => [item, index];
 }
 
 class ClearCartEvent extends CartEvent {

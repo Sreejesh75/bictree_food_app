@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/utils/ui_helpers.dart';
 import '../../cart/bloc/cart_bloc.dart';
 import '../../cart/bloc/cart_event.dart';
 import '../../cart/screens/cart_screen.dart';
@@ -64,42 +65,19 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
         );
 
     final totalPrice = (widget.recipe.price * _quantity).toStringAsFixed(1);
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: const Color(0xFF1E2022),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                'Added $_quantity × ${widget.recipe.name} (\$$totalPrice)',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
-        action: SnackBarAction(
-          label: 'View Cart',
-          textColor: AppColors.primaryOrange,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const CartScreen()),
-            );
-          },
-        ),
-      ),
+    UIHelpers.showTimedSnackBar(
+      context,
+      message: 'Added $_quantity × ${widget.recipe.name} (\$$totalPrice)',
+      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+      actionLabel: 'View Cart',
+      duration: const Duration(seconds: 3),
+      progressColor: AppColors.primaryOrange,
+      onAction: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CartScreen()),
+        );
+      },
     );
   }
 

@@ -13,6 +13,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<AddToCartEvent>(_onAddToCart);
     on<UpdateCartQuantityEvent>(_onUpdateQuantity);
     on<RemoveFromCartEvent>(_onRemoveFromCart);
+    on<RestoreCartItemEvent>(_onRestoreCartItem);
     on<ClearCartEvent>(_onClearCart);
   }
 
@@ -33,7 +34,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         return;
       }
     } catch (_) {
-      // Fallback to empty list gracefully
+      // Graceful fallback on storage errors
     }
     emit(state.copyWith(items: const [], isLoading: false));
   }
@@ -91,6 +92,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     final currentItems = List<CartItem>.from(state.items)
       ..removeWhere((item) => item.recipe.id == event.recipeId);
+
+    emit(state.copyWith(items: currentItems));
+    await _saveToStorage(currentItems);
+  }
+
+  Future<void> _onRestoreCartItem(
+    RestoreCartItemEvent event,
+    Emitter<CartState> emit,
+  ) async {
+    final currentItems = List<CartItem>.from(state.items);
+    if (event.index != null && event.index! >= 0 && event.index! <= currentItems.length) {
+      currentItems.insert(event.index!, event.item);
+    } else {
+      currentItems.add(event.item);
+    }
 
     emit(state.copyWith(items: currentItems));
     await _saveToStorage(currentItems);

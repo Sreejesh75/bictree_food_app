@@ -389,12 +389,12 @@ class _HomeViewState extends State<_HomeView> {
                 ),
               ),
             ),
-            CurvedBottomNavBar(
-              selectedIndex: _bottomNavIndex,
-              onItemTapped: _onBottomNavTapped,
-            ),
           ],
         ),
+      bottomNavigationBar: CurvedBottomNavBar(
+        selectedIndex: _bottomNavIndex,
+        onItemTapped: _onBottomNavTapped,
+      ),
     );
   }
 }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
+import '../../../core/utils/ui_helpers.dart';
 import '../../../core/widgets/custom_primary_button.dart';
 import '../../cart/bloc/cart_bloc.dart';
 import '../../cart/bloc/cart_event.dart';
+import '../../cart/screens/cart_screen.dart';
 import '../models/recipe_model.dart';
 import '../screens/recipe_detail_screen.dart';
 
@@ -62,17 +64,20 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
           ),
         );
     Navigator.pop(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        backgroundColor: const Color(0xFF1E2022),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        content: Text(
-          'Added $_quantity × ${widget.recipe.name} to cart!',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
-        ),
-      ),
+    final totalPrice = (widget.recipe.price * _quantity).toStringAsFixed(1);
+    UIHelpers.showTimedSnackBar(
+      context,
+      message: 'Added $_quantity × ${widget.recipe.name} (\$$totalPrice)',
+      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+      actionLabel: 'View Cart',
+      duration: const Duration(seconds: 3),
+      progressColor: AppColors.primaryOrange,
+      onAction: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CartScreen()),
+        );
+      },
     );
   }
 
