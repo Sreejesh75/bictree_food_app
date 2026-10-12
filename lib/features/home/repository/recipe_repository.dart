@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import '../../../core/constants/api_endpoints.dart';
 import '../../../core/errors/failures.dart';
+import '../../../core/network/dio_client.dart';
 import '../../../core/storage/hive_recipe_cache_service.dart';
+import '../../../core/storage/secure_storage_service.dart';
 import '../models/recipe_model.dart';
 
 class RecipePageResult {
@@ -22,13 +24,15 @@ class RecipePageResult {
 }
 
 class RecipeRepository {
-  final http.Client httpClient;
+  final Dio dio;
   final HiveRecipeCacheService cacheService;
 
   RecipeRepository({
-    http.Client? httpClient,
+    Dio? dio,
+    dynamic httpClient, // Preserved for backwards compatibility with test fakes
     HiveRecipeCacheService? cacheService,
-  })  : httpClient = httpClient ?? http.Client(),
+    SecureStorageService? storageService,
+  })  : dio = dio ?? DioClient.createDio(storageService: storageService),
         cacheService = cacheService ?? HiveRecipeCacheService();
 
   /// Fetch recipes with pagination: ?limit=10&skip=0
@@ -38,37 +42,34 @@ class RecipeRepository {
     int skip = 0,
     String? category,
   }) async {
-    Uri url;
+    String endpoint;
 
     if (category != null && category.isNotEmpty && category != 'All') {
       final catLower = category.toLowerCase();
       if (catLower == 'snacks' || catLower == 'snack') {
-        url = Uri.parse('${ApiEndpoints.recipes}/meal-type/snack?limit=$limit&skip=$skip');
+        endpoint = '${ApiEndpoints.recipes}/meal-type/snack?limit=$limit&skip=$skip';
       } else if (catLower == 'meal' || catLower == 'meals') {
-        url = Uri.parse('${ApiEndpoints.recipes}/meal-type/dinner?limit=$limit&skip=$skip');
+        endpoint = '${ApiEndpoints.recipes}/meal-type/dinner?limit=$limit&skip=$skip';
       } else if (catLower == 'vegan') {
-        url = Uri.parse('${ApiEndpoints.recipes}/tag/vegetarian?limit=$limit&skip=$skip');
+        endpoint = '${ApiEndpoints.recipes}/tag/vegetarian?limit=$limit&skip=$skip';
       } else if (catLower == 'dessert' || catLower == 'desserts') {
-        url = Uri.parse('${ApiEndpoints.recipes}/meal-type/dessert?limit=$limit&skip=$skip');
+        endpoint = '${ApiEndpoints.recipes}/meal-type/dessert?limit=$limit&skip=$skip';
       } else if (catLower == 'drinks' || catLower == 'drink') {
-        url = Uri.parse('${ApiEndpoints.recipes}/meal-type/beverage?limit=$limit&skip=$skip');
+        endpoint = '${ApiEndpoints.recipes}/meal-type/beverage?limit=$limit&skip=$skip';
       } else {
-        url = Uri.parse('${ApiEndpoints.recipes}?limit=$limit&skip=$skip');
+        endpoint = '${ApiEndpoints.recipes}?limit=$limit&skip=$skip';
       }
     } else {
-      url = Uri.parse('${ApiEndpoints.recipes}?limit=$limit&skip=$skip');
+      endpoint = '${ApiEndpoints.recipes}?limit=$limit&skip=$skip';
     }
 
     try {
-      final response = await httpClient
-          .get(
-            url,
-            headers: {'Content-Type': 'application/json'},
-          )
-          .timeout(const Duration(seconds: 12));
+      final response = await dio.get(endpoint);
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final data = response.data is Map<String, dynamic>
+            ? response.data as Map<String, dynamic>
+            : jsonDecode(response.data.toString()) as Map<String, dynamic>;
         final list = (data['recipes'] as List<dynamic>?) ?? [];
         final recipes =
             list.map((e) => RecipeModel.fromJson(e as Map<String, dynamic>)).toList();
@@ -96,7 +97,7 @@ class RecipeRepository {
           if (cached != null) return cached;
         }
         throw ServerFailure(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           message: 'Server returned error status: ${response.statusCode}',
         );
       }
@@ -140,24 +141,21 @@ class RecipeRepository {
     }
 
     try {
-      final url =
-          Uri.parse('${ApiEndpoints.recipeSearch}?q=${Uri.encodeComponent(clean)}');
-      final response = await httpClient
-          .get(
-            url,
-            headers: {'Content-Type': 'application/json'},
-          )
-          .timeout(const Duration(seconds: 12));
+      final endpoint =
+          '${ApiEndpoints.recipeSearch}?q=${Uri.encodeComponent(clean)}';
+      final response = await dio.get(endpoint);
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final data = response.data is Map<String, dynamic>
+            ? response.data as Map<String, dynamic>
+            : jsonDecode(response.data.toString()) as Map<String, dynamic>;
         final list = (data['recipes'] as List<dynamic>?) ?? [];
         return list
             .map((e) => RecipeModel.fromJson(e as Map<String, dynamic>))
             .toList();
       } else {
         throw ServerFailure(
-          statusCode: response.statusCode,
+          statusCode: response.statusCode ?? 500,
           message: 'Search query could not be completed at this time.',
         );
       }

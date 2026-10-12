@@ -1,17 +1,19 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import '../../../core/constants/api_endpoints.dart';
+import '../../../core/network/dio_client.dart';
 import '../../../core/storage/secure_storage_service.dart';
 import '../models/auth_user.dart';
 
 class AuthRepository {
   final SecureStorageService storageService;
-  final http.Client httpClient;
+  final Dio dio;
 
   AuthRepository({
     required this.storageService,
-    http.Client? httpClient,
-  }) : httpClient = httpClient ?? http.Client();
+    Dio? dio,
+    dynamic httpClient, // Preserved for backwards compatibility with tests
+  }) : dio = dio ?? DioClient.createDio(storageService: storageService);
 
   /// Login: Checks both local registered accounts and remote DummyJSON API
   Future<AuthUser> login({
@@ -61,19 +63,19 @@ class AuthRepository {
         : cleanInput;
 
     try {
-      final url = Uri.parse(ApiEndpoints.login);
-      final response = await httpClient.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+      final response = await dio.post(
+        ApiEndpoints.login,
+        data: {
           'username': username,
           'password': cleanPassword,
           'expiresInMins': 60,
-        }),
+        },
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final data = response.data is Map<String, dynamic>
+            ? response.data as Map<String, dynamic>
+            : jsonDecode(response.data.toString()) as Map<String, dynamic>;
         final user = AuthUser.fromJson(data);
 
         if (user.accessToken != null) {
@@ -85,15 +87,15 @@ class AuthRepository {
         await storageService.saveUserData(jsonEncode(user.toJson()));
         return user;
       } else {
-        String errorMessage = 'Invalid credentials';
-        try {
-          final errData = jsonDecode(response.body);
-          if (errData is Map && errData['message'] != null) {
-            errorMessage = errData['message'].toString();
-          }
-        } catch (_) {}
-        throw Exception(errorMessage);
+        throw Exception('Invalid credentials');
       }
+    } on DioException catch (dioErr) {
+      String errorMessage = 'Invalid credentials';
+      if (dioErr.response?.data is Map) {
+        final msg = dioErr.response!.data['message'];
+        if (msg != null) errorMessage = msg.toString();
+      }
+      throw Exception(errorMessage);
     } catch (e) {
       if (e.toString().contains('Invalid') || e.toString().contains('credentials')) {
         rethrow;
@@ -120,24 +122,21 @@ class AuthRepository {
     }
 
     try {
-      final url = Uri.parse(ApiEndpoints.authMe);
-      final response = await httpClient.get(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
+      final response = await dio.get(
+        ApiEndpoints.authMe,
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
+        final data = response.data is Map<String, dynamic>
+            ? response.data as Map<String, dynamic>
+            : jsonDecode(response.data.toString()) as Map<String, dynamic>;
         data['accessToken'] = token;
         final user = AuthUser.fromJson(data);
         await storageService.saveUserData(jsonEncode(user.toJson()));
         return user;
-      } else if (response.statusCode == 401) {
-        await logout();
-        return null;
       } else {
         final cached = await storageService.getUserData();
         if (cached != null) {
@@ -145,6 +144,16 @@ class AuthRepository {
         }
         return null;
       }
+    } on DioException catch (dioErr) {
+      if (dioErr.response?.statusCode == 401) {
+        await logout();
+        return null;
+      }
+      final cached = await storageService.getUserData();
+      if (cached != null) {
+        return AuthUser.fromJson(jsonDecode(cached) as Map<String, dynamic>);
+      }
+      return null;
     } catch (_) {
       final cached = await storageService.getUserData();
       if (cached != null) {
@@ -181,16 +190,14 @@ class AuthRepository {
 
     // 2. Also simulate DummyJSON users/add API call
     try {
-      final url = Uri.parse(ApiEndpoints.usersAdd);
-      await httpClient.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
+      await dio.post(
+        ApiEndpoints.usersAdd,
+        data: {
           'firstName': firstName,
           'lastName': lastName,
           'email': email.trim(),
           'age': 25,
-        }),
+        },
       );
     } catch (_) {}
 

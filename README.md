@@ -17,6 +17,9 @@ lib/
 │   │   ├── app_dimensions.dart        # Padding, margin, border-radius constants
 │   │   ├── app_strings.dart           # English strings & copy
 │   │   └── app_text_styles.dart       # GoogleFonts (Poppins) typography
+│   ├── network/
+│   │   ├── auth_interceptor.dart      # Dio Bearer token injection & 401 handling
+│   │   └── dio_client.dart            # Centralized Dio HTTP client factory
 │   ├── router/
 │   │   └── app_router.dart            # Declarative GoRouter configuration & auth guards
 │   ├── storage/

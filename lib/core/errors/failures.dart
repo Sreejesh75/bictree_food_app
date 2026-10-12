@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 /// Typed failure base class ensuring no raw unhandled exceptions reach the UI.
 abstract class Failure extends Equatable implements Exception {
@@ -77,6 +78,43 @@ class UnknownFailure extends Failure {
 Failure mapExceptionToFailure(dynamic error) {
   if (error is Failure) {
     return error;
+  }
+  if (error is DioException) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return TimeoutFailure(
+          message: 'Connection timed out. Please check your internet connection.',
+          originalError: error,
+        );
+      case DioExceptionType.connectionError:
+        return NetworkFailure(
+          message: 'Unable to connect to the server. Please check your internet connection.',
+          originalError: error,
+        );
+      case DioExceptionType.badResponse:
+        final status = error.response?.statusCode ?? 500;
+        String? message;
+        if (error.response?.data is Map) {
+          message = error.response?.data['message']?.toString();
+        }
+        return ServerFailure(
+          statusCode: status,
+          message: message ?? 'Server returned error status: $status',
+          originalError: error,
+        );
+      case DioExceptionType.cancel:
+        return UnknownFailure(
+          message: 'Request was cancelled.',
+          originalError: error,
+        );
+      default:
+        return NetworkFailure(
+          message: 'Network error occurred. Please try again.',
+          originalError: error,
+        );
+    }
   }
   if (error is SocketException ||
       error.toString().contains('SocketException') ||
