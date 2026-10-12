@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
-import '../constants/app_dimensions.dart';
 import '../constants/app_text_styles.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -8,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final bool obscureText;
+  final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputAction textInputAction;
   final ValueChanged<String>? onFieldSubmitted;
+  final Color? fillColor;
 
   const CustomTextField({
     super.key,
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
     required this.hintText,
     required this.controller,
     this.obscureText = false,
+    this.prefixIcon,
     this.suffixIcon,
     this.keyboardType = TextInputType.text,
     this.validator,
@@ -31,6 +33,7 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.textInputAction = TextInputAction.next,
     this.onFieldSubmitted,
+    this.fillColor,
   });
 
   @override
@@ -40,7 +43,11 @@ class CustomTextField extends StatelessWidget {
       children: [
         Text(
           label,
-          style: AppTextStyles.fieldLabel,
+          style: AppTextStyles.fieldLabel.copyWith(
+            fontWeight: FontWeight.w700,
+            fontSize: 14.5,
+            color: AppColors.textDark,
+          ),
         ),
         const SizedBox(height: 8.0),
         TextFormField(
@@ -59,39 +66,46 @@ class CustomTextField extends StatelessWidget {
             hintText: hintText,
             hintStyle: AppTextStyles.inputHint,
             filled: true,
-            fillColor: AppColors.inputBackground,
+            fillColor: fillColor ?? AppColors.inputBackgroundLight,
             contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 15.0,
+              horizontal: 18.0,
+              vertical: 16.0,
             ),
+            prefixIcon: prefixIcon,
             suffixIcon: suffixIcon,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.inputRadius),
-              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(16.0),
+              borderSide: const BorderSide(
+                color: AppColors.inputBorder,
+                width: 1.2,
+              ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.inputRadius),
-              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(16.0),
+              borderSide: const BorderSide(
+                color: AppColors.inputBorder,
+                width: 1.2,
+              ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.inputRadius),
+              borderRadius: BorderRadius.circular(16.0),
               borderSide: const BorderSide(
                 color: AppColors.primaryOrange,
-                width: 1.5,
+                width: 1.8,
               ),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.inputRadius),
+              borderRadius: BorderRadius.circular(16.0),
               borderSide: const BorderSide(
                 color: AppColors.error,
                 width: 1.2,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppDimensions.inputRadius),
+              borderRadius: BorderRadius.circular(16.0),
               borderSide: const BorderSide(
                 color: AppColors.error,
-                width: 1.5,
+                width: 1.8,
               ),
             ),
           ),

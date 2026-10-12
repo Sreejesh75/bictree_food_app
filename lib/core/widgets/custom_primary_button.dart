@@ -9,6 +9,7 @@ class CustomPrimaryButton extends StatelessWidget {
   final bool isLoading;
   final double? width;
   final double height;
+  final Widget? icon;
 
   const CustomPrimaryButton({
     super.key,
@@ -17,23 +18,55 @@ class CustomPrimaryButton extends StatelessWidget {
     this.isLoading = false,
     this.width,
     this.height = AppDimensions.buttonHeight,
+    this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    final isEnabled = !isLoading && onPressed != null;
+
+    return Container(
       width: width ?? double.infinity,
       height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        gradient: isEnabled
+            ? const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFFFF723F),
+                  AppColors.primaryOrange,
+                  Color(0xFFD24B1B),
+                ],
+              )
+            : LinearGradient(
+                colors: [
+                  AppColors.primaryOrange.withValues(alpha: 0.5),
+                  AppColors.primaryOrange.withValues(alpha: 0.5),
+                ],
+              ),
+        boxShadow: isEnabled
+            ? [
+                BoxShadow(
+                  color: AppColors.primaryOrange.withValues(alpha: 0.38),
+                  blurRadius: 18,
+                  offset: const Offset(0, 6),
+                ),
+              ]
+            : null,
+      ),
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primaryOrange,
-          disabledBackgroundColor: AppColors.primaryOrange.withValues(alpha: 0.6),
+          backgroundColor: Colors.transparent,
+          disabledBackgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppDimensions.buttonRadius),
+            borderRadius: BorderRadius.circular(16.0),
           ),
           elevation: 0,
           shadowColor: Colors.transparent,
+          padding: EdgeInsets.zero,
         ),
         child: isLoading
             ? const SizedBox(
@@ -44,9 +77,22 @@ class CustomPrimaryButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : Text(
-                text,
-                style: AppTextStyles.primaryButton,
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    text,
+                    style: AppTextStyles.primaryButton.copyWith(
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0.4,
+                    ),
+                  ),
+                  if (icon != null) ...[
+                    const SizedBox(width: 8.0),
+                    icon!,
+                  ],
+                ],
               ),
       ),
     );

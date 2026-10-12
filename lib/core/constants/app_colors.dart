@@ -10,8 +10,15 @@ class AppColors {
 
   // Field & Card Colors
   static const Color inputBackground = Color(0xFFF7ECC8);
+  static const Color inputBackgroundLight = Color(0xFFFAF7F2);
+  static const Color inputBorder = Color(0xFFEADBCE);
+  static const Color surfaceWarm = Color(0xFFFFF9F5);
   static const Color inputHint = Color(0xFFA89873);
   static const Color cardBackground = Colors.white;
+
+  // Header Gradients
+  static const Color headerGradientStart = Color(0xFFFFBF42);
+  static const Color headerGradientEnd = Color(0xFFF5A31A);
 
   // Text Colors
   static const Color textDark = Color(0xFF3B1E08);
