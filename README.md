@@ -6,7 +6,7 @@ A clean, production-ready Flutter application built for the **Bictree IT Team - 
 
 ## 🏗️ Architecture & Project Structure
 
-The project follows a clean, feature-first structure with **BLoC** state management, centralized API endpoints, direct DummyJSON integration, and persistent local storage:
+The project strictly adheres to **Layered Clean Architecture (data / domain / presentation)** with the **Repository Pattern**, **BLoC** state management, centralized **Dio** networking with an **AuthInterceptor**, **GoRouter** declarative routing, and local persistence:
 
 ```text
 lib/
@@ -17,12 +17,15 @@ lib/
 │   │   ├── app_dimensions.dart        # Padding, margin, border-radius constants
 │   │   ├── app_strings.dart           # English strings & copy
 │   │   └── app_text_styles.dart       # GoogleFonts (Poppins) typography
+│   ├── errors/
+│   │   └── failures.dart              # Typed Failure models & DioException mapper
 │   ├── network/
 │   │   ├── auth_interceptor.dart      # Dio Bearer token injection & 401 handling
 │   │   └── dio_client.dart            # Centralized Dio HTTP client factory
 │   ├── router/
 │   │   └── app_router.dart            # Declarative GoRouter configuration & auth guards
 │   ├── storage/
+│   │   ├── hive_recipe_cache_service.dart # Offline recipe caching
 │   │   └── secure_storage_service.dart# Secure token storage & persistent user registry
 │   ├── theme/
 │   │   └── app_theme.dart             # Light Material 3 theme
@@ -38,25 +41,22 @@ lib/
 │
 ├── features/
 │   ├── auth/
-│   │   ├── bloc/                      # AuthBloc, AuthEvent, AuthState
-│   │   ├── models/                    # AuthUser model
-│   │   ├── repository/                # AuthRepository (DummyJSON login, persistent signups)
-│   │   └── screens/                   # LoginScreen, SignUpScreen
+│   │   ├── data/                      # DATA LAYER: AuthRemoteDataSource (Dio), AuthLocalDataSource, AuthRepoImpl
+│   │   ├── domain/                    # DOMAIN LAYER: AuthUser entity, IAuthRepository contract
+│   │   └── presentation/              # PRESENTATION LAYER: AuthBloc, LoginScreen, SignUpScreen
 │   │
-│   └── home/
-│       ├── bloc/                      # HomeBloc, HomeEvent, HomeState (pagination, search, sort)
-│       ├── models/                    # RecipeModel
-│       ├── repository/                # RecipeRepository (dummyjson.com/recipes)
-│       ├── widgets/
-│       │   ├── banner_carousel.dart   # Auto-changing PageView using assets/images/
-│       │   ├── best_seller_section.dart# Horizontal best seller cards with price tags
-│       │   ├── category_chips.dart    # Snacks, Meal, Vegan, Dessert, Drinks chips
-│       │   ├── home_header.dart       # Top banner, search pill, action icons, greeting
-│       │   ├── recipe_card.dart       # 2-column food card with rating & price badges
-│       │   ├── recipe_shimmer.dart    # Shimmer skeleton loading placeholder
-│       │   └── sort_bottom_sheet.dart # Modal bottom sheet for sorting recipes
-│       └── screens/
-│           └── home_screen.dart       # Main home dashboard matching Figma UI
+│   ├── home/
+│   │   ├── data/                      # DATA LAYER: RecipeRemoteDataSource (Dio), RecipeLocalDataSource (Hive), RecipeRepoImpl
+│   │   ├── domain/                    # DOMAIN LAYER: RecipeModel & RecipePageResult entities, IRecipeRepository contract
+│   │   └── presentation/              # PRESENTATION LAYER: HomeBloc, HomeScreen, RecipeDetailScreen, Widgets
+│   │
+│   ├── cart/
+│   │   ├── data/                      # DATA LAYER: CartLocalDataSource (SharedPreferences), CartRepoImpl
+│   │   ├── domain/                    # DOMAIN LAYER: CartItem entity, ICartRepository contract
+│   │   └── presentation/              # PRESENTATION LAYER: CartBloc, CartScreen, Widgets
+│   │
+│   └── favorites/
+│       └── presentation/              # PRESENTATION LAYER: FavoritesScreen, Widgets
 └── main.dart
 ```
 

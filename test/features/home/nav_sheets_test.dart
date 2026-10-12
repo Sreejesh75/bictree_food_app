@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:bictree_food_app/core/storage/secure_storage_service.dart';
 import 'package:bictree_food_app/features/auth/bloc/auth_bloc.dart';
 import 'package:bictree_food_app/features/auth/models/auth_user.dart';
@@ -29,7 +28,8 @@ class FakeAuthRepo extends AuthRepository {
 }
 
 class FakeRecipeRepo extends RecipeRepository {
-  FakeRecipeRepo() : super(httpClient: http.Client());
+  FakeRecipeRepo() : super();
+
   @override
   Future<RecipePageResult> getRecipes({int limit = 10, int skip = 0, String? category}) async {
     return const RecipePageResult(recipes: [], total: 0, skip: 0, hasMore: false);

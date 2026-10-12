@@ -15,7 +15,6 @@ import 'package:bictree_food_app/features/auth/bloc/auth_bloc.dart';
 import 'package:bictree_food_app/features/auth/repository/auth_repository.dart';
 import 'package:bictree_food_app/core/storage/secure_storage_service.dart';
 import 'package:bictree_food_app/features/auth/models/auth_user.dart';
-import 'package:http/http.dart' as http;
 
 class MockStorage extends SecureStorageService {
   @override
@@ -33,7 +32,8 @@ class FakeAuthRepo extends AuthRepository {
 }
 
 class FakeRecipeRepo extends RecipeRepository {
-  FakeRecipeRepo() : super(httpClient: http.Client());
+  FakeRecipeRepo() : super();
+
 
   @override
   Future<RecipePageResult> getRecipes({int limit = 10, int skip = 0, String? category}) async {

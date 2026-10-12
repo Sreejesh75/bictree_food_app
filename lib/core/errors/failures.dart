@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 
 /// Typed failure base class ensuring no raw unhandled exceptions reach the UI.
@@ -126,10 +125,10 @@ Failure mapExceptionToFailure(dynamic error) {
       error.toString().contains('TimeoutException')) {
     return TimeoutFailure(originalError: error);
   }
-  if (error is http.ClientException ||
-      error.toString().contains('ClientException')) {
+  if (error.toString().contains('ClientException')) {
     return NetworkFailure(originalError: error);
   }
+
   if (error is FormatException ||
       error.toString().contains('FormatException')) {
     return ServerFailure(
