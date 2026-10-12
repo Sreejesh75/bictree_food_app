@@ -48,8 +48,16 @@ class UIHelpers {
       isError: isError,
       duration: duration,
       icon: isError
-          ? const Icon(Icons.error_outline_rounded, color: Colors.white, size: 20)
-          : const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+          ? const Icon(
+              Icons.error_outline_rounded,
+              color: Colors.white,
+              size: 20,
+            )
+          : const Icon(
+              Icons.check_circle_rounded,
+              color: Color(0xFF4CAF50),
+              size: 20,
+            ),
       progressColor: isError ? Colors.white : AppColors.primaryOrange,
       backgroundColor: const Color(0xFF1E2022),
     );

@@ -33,7 +33,9 @@ void main() {
     SharedPreferences.setMockInitialValues({});
   });
 
-  testWidgets('RecipeDetailScreen displays recipe details and adds to cart', (tester) async {
+  testWidgets('RecipeDetailScreen displays recipe details and adds to cart', (
+    tester,
+  ) async {
     final cartBloc = CartBloc();
 
     await tester.pumpWidget(
@@ -57,7 +59,6 @@ void main() {
     expect(find.text('Slice baguette'), findsOneWidget);
     expect(find.text('Add to Cart • \$60.8'), findsOneWidget);
 
-    // Tap + to increment quantity
     await tester.tap(find.byIcon(Icons.add_rounded));
     await tester.pumpAndSettle();
 

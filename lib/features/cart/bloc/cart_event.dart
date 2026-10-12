@@ -26,10 +26,7 @@ class AddToCartEvent extends CartEvent {
   final RecipeModel recipe;
   final int quantity;
 
-  const AddToCartEvent({
-    required this.recipe,
-    this.quantity = 1,
-  });
+  const AddToCartEvent({required this.recipe, this.quantity = 1});
 
   @override
   List<Object?> get props => [recipe, quantity];
@@ -61,10 +58,7 @@ class RestoreCartItemEvent extends CartEvent {
   final CartItem item;
   final int? index;
 
-  const RestoreCartItemEvent({
-    required this.item,
-    this.index,
-  });
+  const RestoreCartItemEvent({required this.item, this.index});
 
   @override
   List<Object?> get props => [item, index];

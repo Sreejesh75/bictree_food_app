@@ -45,18 +45,25 @@ void main() {
 
     test('2. Router is initialized with initial route /login', () {
       final router = createRouter(authBloc);
-      expect(router.routeInformationProvider.value.uri.toString(), equals('/login'));
+      expect(
+        router.routeInformationProvider.value.uri.toString(),
+        equals('/login'),
+      );
       router.dispose();
     });
 
-    test('3. Redirect guard logic redirects unauthenticated user to /login', () {
-      final router = createRouter(authBloc);
-      // When auth state is UnauthenticatedState and trying to navigate to /cart
-      authBloc.emit(const UnauthenticatedState());
-      
-      // Initial location remains /login
-      expect(router.routeInformationProvider.value.uri.toString(), equals('/login'));
-      router.dispose();
-    });
+    test(
+      '3. Redirect guard logic redirects unauthenticated user to /login',
+      () {
+        final router = createRouter(authBloc);
+        authBloc.emit(const UnauthenticatedState());
+
+        expect(
+          router.routeInformationProvider.value.uri.toString(),
+          equals('/login'),
+        );
+        router.dispose();
+      },
+    );
   });
 }

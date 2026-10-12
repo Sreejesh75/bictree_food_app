@@ -88,14 +88,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       FocusScope.of(context).unfocus();
       context.read<AuthBloc>().add(
-            SignUpSubmittedEvent(
-              fullName: _fullNameController.text.trim(),
-              email: _emailController.text.trim(),
-              mobileNumber: _mobileController.text.trim(),
-              password: _passwordController.text,
-              dateOfBirth: _dobController.text.trim(),
-            ),
-          );
+        SignUpSubmittedEvent(
+          fullName: _fullNameController.text.trim(),
+          email: _emailController.text.trim(),
+          mobileNumber: _mobileController.text.trim(),
+          password: _passwordController.text,
+          dateOfBirth: _dobController.text.trim(),
+        ),
+      );
     }
   }
 
@@ -104,7 +104,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthErrorState) {
-          UIHelpers.showSnackBar(context, message: state.message, isError: true);
+          UIHelpers.showSnackBar(
+            context,
+            message: state.message,
+            isError: true,
+          );
         } else if (state is AuthenticatedState) {
           if (state.successMessage != null) {
             UIHelpers.showSnackBar(context, message: state.successMessage!);
@@ -113,9 +117,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             context.go(AppRoutes.home, extra: state.user);
           } else {
             Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (_) => HomeScreen(user: state.user),
-              ),
+              MaterialPageRoute(builder: (_) => HomeScreen(user: state.user)),
               (route) => false,
             );
           }
@@ -130,13 +132,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             bottom: false,
             child: Column(
               children: [
-                // Header (Yellow with back icon & New Account title)
                 AuthHeader(
                   title: AppStrings.newAccount,
                   onBack: () => Navigator.of(context).pop(),
                 ),
 
-                // White Card sheet with rounded top
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -154,7 +154,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 1. Full Name
                             CustomTextField(
                               label: AppStrings.fullNameLabel,
                               hintText: AppStrings.fullNameHint,
@@ -165,7 +164,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 14.0),
 
-                            // 2. Password
                             CustomTextField(
                               label: AppStrings.passwordLabel,
                               hintText: AppStrings.passwordHint,
@@ -190,7 +188,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 14.0),
 
-                            // 3. Email
                             CustomTextField(
                               label: AppStrings.emailLabel,
                               hintText: AppStrings.emailHint,
@@ -201,7 +198,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 14.0),
 
-                            // 4. Mobile Number
                             CustomTextField(
                               label: AppStrings.mobileNumberLabel,
                               hintText: AppStrings.mobileNumberHint,
@@ -212,7 +208,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 14.0),
 
-                            // 5. Date of Birth
                             CustomTextField(
                               label: AppStrings.dateOfBirthLabel,
                               hintText: AppStrings.dateOfBirthHint,
@@ -231,7 +226,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 16.0),
 
-                            // Terms of Use & Privacy Policy
                             Center(
                               child: Text(
                                 'By continuing, you agree to Terms of Use and Privacy Policy.',
@@ -241,7 +235,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 18.0),
 
-                            // Sign Up Button
                             CustomPrimaryButton(
                               text: AppStrings.signUp,
                               isLoading: isLoading,
@@ -249,7 +242,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 18.0),
 
-                            // Social Auth Section
                             SocialAuthSection(
                               onGoogleTap: () => UIHelpers.showSnackBar(
                                 context,
@@ -266,7 +258,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             const SizedBox(height: 18.0),
 
-                            // Already have an account? Log In
                             Center(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -9,7 +9,6 @@ import '../../domain/repositories/i_recipe_repository.dart';
 import '../datasources/recipe_local_data_source.dart';
 import '../datasources/recipe_remote_data_source.dart';
 
-/// Concrete Data Layer implementation of [IRecipeRepository].
 class RecipeRepositoryImpl implements IRecipeRepository {
   final RecipeRemoteDataSource remoteDataSource;
   final RecipeLocalDataSource localDataSource;
@@ -18,21 +17,23 @@ class RecipeRepositoryImpl implements IRecipeRepository {
 
   RecipeRepositoryImpl({
     Dio? dio,
-    dynamic httpClient, // Preserved for backwards compatibility with test fakes
+    dynamic httpClient,
     HiveRecipeCacheService? cacheService,
     SecureStorageService? storageService,
     RecipeRemoteDataSource? remoteDataSource,
     RecipeLocalDataSource? localDataSource,
-  })  : dio = dio ?? DioClient.createDio(storageService: storageService),
-        cacheService = cacheService ?? HiveRecipeCacheService(),
-        remoteDataSource = remoteDataSource ??
-            RecipeRemoteDataSourceImpl(
-              dio: dio ?? DioClient.createDio(storageService: storageService),
-            ),
-        localDataSource = localDataSource ??
-            RecipeLocalDataSourceImpl(
-              cacheService: cacheService ?? HiveRecipeCacheService(),
-            );
+  }) : dio = dio ?? DioClient.createDio(storageService: storageService),
+       cacheService = cacheService ?? HiveRecipeCacheService(),
+       remoteDataSource =
+           remoteDataSource ??
+           RecipeRemoteDataSourceImpl(
+             dio: dio ?? DioClient.createDio(storageService: storageService),
+           ),
+       localDataSource =
+           localDataSource ??
+           RecipeLocalDataSourceImpl(
+             cacheService: cacheService ?? HiveRecipeCacheService(),
+           );
 
   @override
   Future<RecipePageResult> getRecipes({
@@ -48,12 +49,14 @@ class RecipeRepositoryImpl implements IRecipeRepository {
       );
 
       final list = (data['recipes'] as List<dynamic>?) ?? [];
-      final recipes =
-          list.map((e) => RecipeModel.fromJson(e as Map<String, dynamic>)).toList();
-      final total = data['total'] is int ? data['total'] as int : recipes.length;
+      final recipes = list
+          .map((e) => RecipeModel.fromJson(e as Map<String, dynamic>))
+          .toList();
+      final total = data['total'] is int
+          ? data['total'] as int
+          : recipes.length;
       final currentSkip = data['skip'] is int ? data['skip'] as int : skip;
 
-      // Cache first page items into Hive
       if (skip == 0 && (category == null || category == 'All')) {
         try {
           await localDataSource.cacheRecipes(recipes);
@@ -72,7 +75,6 @@ class RecipeRepositoryImpl implements IRecipeRepository {
         rethrow;
       }
 
-      // Check Hive cache for first page fallback
       if (skip == 0 && (category == null || category == 'All')) {
         final cached = await _getCachedFallback();
         if (cached != null) return cached;
@@ -114,7 +116,6 @@ class RecipeRepositoryImpl implements IRecipeRepository {
   }
 }
 
-/// Backward compatibility class alias ensuring existing types & mocks stay 100% compatible.
 class RecipeRepository extends RecipeRepositoryImpl {
   RecipeRepository({
     super.dio,

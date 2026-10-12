@@ -7,12 +7,10 @@ abstract class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Check secure storage & auto-login on startup
 class CheckAuthStatusEvent extends AuthEvent {
   const CheckAuthStatusEvent();
 }
 
-/// User submits login form
 class LoginSubmittedEvent extends AuthEvent {
   final String usernameOrEmail;
   final String password;
@@ -26,7 +24,6 @@ class LoginSubmittedEvent extends AuthEvent {
   List<Object?> get props => [usernameOrEmail, password];
 }
 
-/// User submits sign up form
 class SignUpSubmittedEvent extends AuthEvent {
   final String fullName;
   final String email;
@@ -43,10 +40,15 @@ class SignUpSubmittedEvent extends AuthEvent {
   });
 
   @override
-  List<Object?> get props => [fullName, email, mobileNumber, password, dateOfBirth];
+  List<Object?> get props => [
+    fullName,
+    email,
+    mobileNumber,
+    password,
+    dateOfBirth,
+  ];
 }
 
-/// User requests logout or received 401
 class LogoutRequestedEvent extends AuthEvent {
   const LogoutRequestedEvent();
 }

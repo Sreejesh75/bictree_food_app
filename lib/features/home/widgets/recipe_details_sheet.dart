@@ -59,17 +59,18 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
 
   void _addToCart() {
     context.read<CartBloc>().add(
-          AddToCartEvent(
-            recipe: widget.recipe,
-            quantity: _quantity,
-          ),
-        );
+      AddToCartEvent(recipe: widget.recipe, quantity: _quantity),
+    );
     Navigator.pop(context);
     final totalPrice = (widget.recipe.price * _quantity).toStringAsFixed(1);
     UIHelpers.showTimedSnackBar(
       context,
       message: 'Added $_quantity × ${widget.recipe.name} (\$$totalPrice)',
-      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+      icon: const Icon(
+        Icons.check_circle_rounded,
+        color: Color(0xFF4CAF50),
+        size: 20,
+      ),
       actionLabel: 'View Cart',
       duration: const Duration(seconds: 3),
       progressColor: AppColors.primaryOrange,
@@ -122,7 +123,11 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
                 errorBuilder: (context, error, stackTrace) => Container(
                   height: 180,
                   color: const Color(0xFFFBF1D5),
-                  child: const Icon(Icons.fastfood, size: 50, color: AppColors.primaryOrange),
+                  child: const Icon(
+                    Icons.fastfood,
+                    size: 50,
+                    color: AppColors.primaryOrange,
+                  ),
                 ),
               ),
             ),
@@ -137,7 +142,10 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.primaryOrange,
                     borderRadius: BorderRadius.circular(12),
@@ -156,18 +164,32 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
             const SizedBox(height: 8),
             Row(
               children: [
-                const Icon(Icons.star_rounded, color: Color(0xFFFFB300), size: 18),
+                const Icon(
+                  Icons.star_rounded,
+                  color: Color(0xFFFFB300),
+                  size: 18,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '${widget.recipe.rating} (${widget.recipe.reviewCount} reviews)',
-                  style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(width: 16),
-                const Icon(Icons.timer_outlined, color: AppColors.primaryOrange, size: 16),
+                const Icon(
+                  Icons.timer_outlined,
+                  color: AppColors.primaryOrange,
+                  size: 16,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '${widget.recipe.prepTimeMinutes + widget.recipe.cookTimeMinutes} mins',
-                  style: const TextStyle(color: Color(0xFF8A8A8E), fontSize: 13),
+                  style: const TextStyle(
+                    color: Color(0xFF8A8A8E),
+                    fontSize: 13,
+                  ),
                 ),
                 const Spacer(),
                 GestureDetector(
@@ -216,7 +238,10 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
               children: widget.recipe.ingredients
                   .map(
                     (ing) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4.5),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4.5,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFFFF3D2),
                         borderRadius: BorderRadius.circular(10),
@@ -236,7 +261,6 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
             const SizedBox(height: 24),
             Row(
               children: [
-                // Quantity Selector [-] QTY [+]
                 Container(
                   height: 48,
                   decoration: BoxDecoration(
@@ -253,13 +277,17 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
                           height: 36,
                           margin: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: _quantity > 1 ? Colors.white : Colors.transparent,
+                            color: _quantity > 1
+                                ? Colors.white
+                                : Colors.transparent,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.remove,
                             size: 16,
-                            color: _quantity > 1 ? AppColors.textDark : Colors.grey[400],
+                            color: _quantity > 1
+                                ? AppColors.textDark
+                                : Colors.grey[400],
                           ),
                         ),
                       ),

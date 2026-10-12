@@ -7,10 +7,7 @@ class CategoryItem {
   final String label;
   final String svgPath;
 
-  const CategoryItem({
-    required this.label,
-    required this.svgPath,
-  });
+  const CategoryItem({required this.label, required this.svgPath});
 }
 
 class CategoryChips extends StatelessWidget {
@@ -43,7 +40,8 @@ class CategoryChips extends StatelessWidget {
         separatorBuilder: (context, index) => const SizedBox(width: 14.0),
         itemBuilder: (context, index) {
           final cat = categories[index];
-          final isSelected = selectedCategory.toLowerCase() == cat.label.toLowerCase();
+          final isSelected =
+              selectedCategory.toLowerCase() == cat.label.toLowerCase();
 
           return GestureDetector(
             onTap: () => onCategorySelected(cat.label),
@@ -56,15 +54,21 @@ class CategoryChips extends StatelessWidget {
                   width: 50.0,
                   height: 75.0,
                   decoration: BoxDecoration(
-                    color: isSelected ? const Color(0xFFFFE8AA) : const Color(0xFFFEF7E6),
+                    color: isSelected
+                        ? const Color(0xFFFFE8AA)
+                        : const Color(0xFFFEF7E6),
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.all(
-                      color: isSelected ? AppColors.primaryOrange : const Color(0xFFF3E7C4),
+                      color: isSelected
+                          ? AppColors.primaryOrange
+                          : const Color(0xFFF3E7C4),
                       width: 1.0,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: isSelected ? 0.08 : 0.03),
+                        color: Colors.black.withValues(
+                          alpha: isSelected ? 0.08 : 0.03,
+                        ),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),
@@ -85,7 +89,9 @@ class CategoryChips extends StatelessWidget {
                   style: AppTextStyles.fieldLabel.copyWith(
                     fontSize: 12.0,
                     fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
-                    color: isSelected ? AppColors.primaryOrange : AppColors.textDark,
+                    color: isSelected
+                        ? AppColors.primaryOrange
+                        : AppColors.textDark,
                   ),
                 ),
               ],

@@ -87,10 +87,14 @@ class BestSellerSection extends StatelessWidget {
                           child: Image.network(
                             recipe.image,
                             fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => Container(
-                              color: const Color(0xFFFBF1D5),
-                              child: const Icon(Icons.fastfood_outlined, color: AppColors.primaryOrange),
-                            ),
+                            errorBuilder: (context, error, stackTrace) =>
+                                Container(
+                                  color: const Color(0xFFFBF1D5),
+                                  child: const Icon(
+                                    Icons.fastfood_outlined,
+                                    color: AppColors.primaryOrange,
+                                  ),
+                                ),
                             loadingBuilder: (context, child, loadingProgress) {
                               if (loadingProgress == null) return child;
                               return Container(
@@ -113,7 +117,10 @@ class BestSellerSection extends StatelessWidget {
                           right: 4.0,
                           bottom: 6.0,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0,
+                              vertical: 2.0,
+                            ),
                             decoration: BoxDecoration(
                               color: AppColors.primaryOrange,
                               borderRadius: BorderRadius.circular(10.0),

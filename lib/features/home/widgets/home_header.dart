@@ -102,10 +102,14 @@ class _HomeHeaderState extends State<HomeHeader> {
                         child: TextField(
                           controller: _searchController,
                           onChanged: _onQueryChanged,
-                          style: AppTextStyles.inputText.copyWith(fontSize: 13.5),
+                          style: AppTextStyles.inputText.copyWith(
+                            fontSize: 13.5,
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Search food or recipes',
-                            hintStyle: AppTextStyles.inputHint.copyWith(fontSize: 13.0),
+                            hintStyle: AppTextStyles.inputHint.copyWith(
+                              fontSize: 13.0,
+                            ),
                             border: InputBorder.none,
                             isDense: true,
                             contentPadding: EdgeInsets.zero,
@@ -190,11 +194,7 @@ class _HomeHeaderState extends State<HomeHeader> {
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: const Color(0xFFE85826),
-              size: 20,
-            ),
+            child: Icon(icon, color: const Color(0xFFE85826), size: 20),
           ),
           if (badgeCount != null && badgeCount > 0)
             Positioned(

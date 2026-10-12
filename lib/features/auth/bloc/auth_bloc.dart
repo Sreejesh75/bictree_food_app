@@ -40,10 +40,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         usernameOrEmail: event.usernameOrEmail,
         password: event.password,
       );
-      emit(AuthenticatedState(
-        user: user,
-        successMessage: 'Welcome back, ${user.firstName}!',
-      ));
+      emit(
+        AuthenticatedState(
+          user: user,
+          successMessage: 'Welcome back, ${user.firstName}!',
+        ),
+      );
     } catch (e) {
       emit(AuthErrorState(e.toString().replaceAll('Exception: ', '')));
     }
@@ -62,10 +64,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         password: event.password,
         dateOfBirth: event.dateOfBirth,
       );
-      emit(AuthenticatedState(
-        user: user,
-        successMessage: 'Account created successfully!',
-      ));
+      emit(
+        AuthenticatedState(
+          user: user,
+          successMessage: 'Account created successfully!',
+        ),
+      );
     } catch (e) {
       emit(AuthErrorState(e.toString().replaceAll('Exception: ', '')));
     }

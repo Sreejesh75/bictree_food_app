@@ -30,15 +30,20 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
     if (category != null && category.isNotEmpty && category != 'All') {
       final catLower = category.toLowerCase();
       if (catLower == 'snacks' || catLower == 'snack') {
-        endpoint = '${ApiEndpoints.recipes}/meal-type/snack?limit=$limit&skip=$skip';
+        endpoint =
+            '${ApiEndpoints.recipes}/meal-type/snack?limit=$limit&skip=$skip';
       } else if (catLower == 'meal' || catLower == 'meals') {
-        endpoint = '${ApiEndpoints.recipes}/meal-type/dinner?limit=$limit&skip=$skip';
+        endpoint =
+            '${ApiEndpoints.recipes}/meal-type/dinner?limit=$limit&skip=$skip';
       } else if (catLower == 'vegan') {
-        endpoint = '${ApiEndpoints.recipes}/tag/vegetarian?limit=$limit&skip=$skip';
+        endpoint =
+            '${ApiEndpoints.recipes}/tag/vegetarian?limit=$limit&skip=$skip';
       } else if (catLower == 'dessert' || catLower == 'desserts') {
-        endpoint = '${ApiEndpoints.recipes}/meal-type/dessert?limit=$limit&skip=$skip';
+        endpoint =
+            '${ApiEndpoints.recipes}/meal-type/dessert?limit=$limit&skip=$skip';
       } else if (catLower == 'drinks' || catLower == 'drink') {
-        endpoint = '${ApiEndpoints.recipes}/meal-type/beverage?limit=$limit&skip=$skip';
+        endpoint =
+            '${ApiEndpoints.recipes}/meal-type/beverage?limit=$limit&skip=$skip';
       } else {
         endpoint = '${ApiEndpoints.recipes}?limit=$limit&skip=$skip';
       }
@@ -60,7 +65,8 @@ class RecipeRemoteDataSourceImpl implements RecipeRemoteDataSource {
 
   @override
   Future<List<RecipeModel>> searchRecipes(String query) async {
-    final endpoint = '${ApiEndpoints.recipeSearch}?q=${Uri.encodeComponent(query)}';
+    final endpoint =
+        '${ApiEndpoints.recipeSearch}?q=${Uri.encodeComponent(query)}';
     final response = await dio.get(endpoint);
 
     if (response.statusCode == 200) {

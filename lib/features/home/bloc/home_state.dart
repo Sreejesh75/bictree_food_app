@@ -76,19 +76,19 @@ class HomeState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        recipes,
-        bestSellers,
-        favorites,
-        selectedCategory,
-        searchQuery,
-        selectedSort,
-        isLoadingMore,
-        hasMore,
-        currentSkip,
-        errorMessage,
-        isOffline,
-        failure,
-        isFromCache,
-      ];
+    status,
+    recipes,
+    bestSellers,
+    favorites,
+    selectedCategory,
+    searchQuery,
+    selectedSort,
+    isLoadingMore,
+    hasMore,
+    currentSkip,
+    errorMessage,
+    isOffline,
+    failure,
+    isFromCache,
+  ];
 }

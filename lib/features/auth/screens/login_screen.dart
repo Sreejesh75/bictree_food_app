@@ -38,7 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController = TextEditingController();
   }
 
-
   @override
   void dispose() {
     _usernameController.dispose();
@@ -50,11 +49,11 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState?.validate() ?? false) {
       FocusScope.of(context).unfocus();
       context.read<AuthBloc>().add(
-            LoginSubmittedEvent(
-              usernameOrEmail: _usernameController.text.trim(),
-              password: _passwordController.text,
-            ),
-          );
+        LoginSubmittedEvent(
+          usernameOrEmail: _usernameController.text.trim(),
+          password: _passwordController.text,
+        ),
+      );
     }
   }
 
@@ -70,7 +69,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthErrorState) {
-          UIHelpers.showSnackBar(context, message: state.message, isError: true);
+          UIHelpers.showSnackBar(
+            context,
+            message: state.message,
+            isError: true,
+          );
         } else if (state is AuthenticatedState) {
           if (state.successMessage != null) {
             UIHelpers.showSnackBar(context, message: state.successMessage!);
@@ -79,9 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
             context.go(AppRoutes.home, extra: state.user);
           } else {
             Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (_) => HomeScreen(user: state.user),
-              ),
+              MaterialPageRoute(builder: (_) => HomeScreen(user: state.user)),
             );
           }
         }
@@ -95,7 +96,6 @@ class _LoginScreenState extends State<LoginScreen> {
             bottom: false,
             child: Column(
               children: [
-                // Premium Branded Header with Badge & Tagline
                 AuthHeader(
                   title: AppStrings.logIn,
                   onBack: Navigator.of(context).canPop()
@@ -118,7 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               offset: const Offset(0, 6),
                             ),
                             BoxShadow(
-                              color: AppColors.primaryOrange.withValues(alpha: 0.25),
+                              color: AppColors.primaryOrange.withValues(
+                                alpha: 0.25,
+                              ),
                               blurRadius: 12,
                               offset: const Offset(0, 2),
                             ),
@@ -132,7 +134,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.22),
                           borderRadius: BorderRadius.circular(20),
@@ -166,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                // White Card sheet with refined ambient shadow & curved top
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -194,7 +198,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Subtle top pull indicator
                             Center(
                               child: Container(
                                 width: 44,
@@ -207,7 +210,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
 
-                            // Welcome heading
                             Row(
                               children: [
                                 Text(
@@ -227,7 +229,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 6.0),
 
-                            // Subtitle
                             Text(
                               AppStrings.welcomeSubtitle,
                               style: AppTextStyles.bodySubtitle.copyWith(
@@ -237,9 +238,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
 
-                            // Test Credentials Helper Chip
                             Container(
-                              margin: const EdgeInsets.only(top: 14.0, bottom: 6.0),
+                              margin: const EdgeInsets.only(
+                                top: 14.0,
+                                bottom: 6.0,
+                              ),
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12.0,
                                 vertical: 8.0,
@@ -314,7 +317,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 18.0),
 
-                            // Username / Email Input with Prefix Icon
                             CustomTextField(
                               label: AppStrings.emailOrMobileLabel,
                               hintText: AppStrings.emailOrMobileHint,
@@ -330,7 +332,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 16.0),
 
-                            // Password Input with Lock Icon & Visibility Toggle
                             CustomTextField(
                               label: AppStrings.passwordLabel,
                               hintText: AppStrings.passwordHint,
@@ -364,7 +365,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 10.0),
 
-                            // Forget Password Link with key icon
                             Align(
                               alignment: Alignment.centerRight,
                               child: GestureDetector(
@@ -390,7 +390,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 24.0),
 
-                            // Log In Primary Button with Gradient & Arrow
                             CustomPrimaryButton(
                               text: AppStrings.logIn,
                               isLoading: isLoading,
@@ -403,7 +402,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 22.0),
 
-                            // Social Auth Section
                             SocialAuthSection(
                               onGoogleTap: () => UIHelpers.showSnackBar(
                                 context,
@@ -420,7 +418,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: 24.0),
 
-                            // Don't have an account? Sign Up Pill
                             Center(
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
@@ -452,16 +449,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                         } else {
                                           Navigator.of(context).push(
                                             MaterialPageRoute(
-                                              builder: (_) => const SignUpScreen(),
+                                              builder: (_) =>
+                                                  const SignUpScreen(),
                                             ),
                                           );
                                         }
                                       },
                                       child: Text(
                                         AppStrings.signUp,
-                                        style: AppTextStyles.orangeLink.copyWith(
-                                          fontWeight: FontWeight.w800,
-                                        ),
+                                        style: AppTextStyles.orangeLink
+                                            .copyWith(
+                                              fontWeight: FontWeight.w800,
+                                            ),
                                       ),
                                     ),
                                   ],

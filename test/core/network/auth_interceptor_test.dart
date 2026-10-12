@@ -33,7 +33,10 @@ void main() {
 
       await interceptor.onRequest(options, handler);
 
-      expect(options.headers['Authorization'], equals('Bearer valid_jwt_token_123'));
+      expect(
+        options.headers['Authorization'],
+        equals('Bearer valid_jwt_token_123'),
+      );
       expect(options.headers['Content-Type'], equals('application/json'));
     });
 
@@ -74,16 +77,16 @@ void main() {
       expect(handler.receivedError, equals(dioError));
     });
 
-    test('4. DioClient.createDio initializes Dio with BaseOptions and AuthInterceptor', () {
-      final mockStorage = _MockStorageService();
-      final dio = DioClient.createDio(storageService: mockStorage);
+    test(
+      '4. DioClient.createDio initializes Dio with BaseOptions and AuthInterceptor',
+      () {
+        final mockStorage = _MockStorageService();
+        final dio = DioClient.createDio(storageService: mockStorage);
 
-      expect(dio.options.connectTimeout, equals(const Duration(seconds: 15)));
-      expect(dio.options.receiveTimeout, equals(const Duration(seconds: 15)));
-      expect(
-        dio.interceptors.any((i) => i is AuthInterceptor),
-        isTrue,
-      );
-    });
+        expect(dio.options.connectTimeout, equals(const Duration(seconds: 15)));
+        expect(dio.options.receiveTimeout, equals(const Duration(seconds: 15)));
+        expect(dio.interceptors.any((i) => i is AuthInterceptor), isTrue);
+      },
+    );
   });
 }

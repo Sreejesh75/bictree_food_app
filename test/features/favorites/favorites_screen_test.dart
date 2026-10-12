@@ -34,10 +34,18 @@ class FakeAuthRepo extends AuthRepository {
 class FakeRecipeRepo extends RecipeRepository {
   FakeRecipeRepo() : super();
 
-
   @override
-  Future<RecipePageResult> getRecipes({int limit = 10, int skip = 0, String? category}) async {
-    return const RecipePageResult(recipes: [], total: 0, skip: 0, hasMore: false);
+  Future<RecipePageResult> getRecipes({
+    int limit = 10,
+    int skip = 0,
+    String? category,
+  }) async {
+    return const RecipePageResult(
+      recipes: [],
+      total: 0,
+      skip: 0,
+      hasMore: false,
+    );
   }
 }
 
@@ -78,113 +86,112 @@ void main() {
   });
 
   group('FavoritesScreen Tests', () {
-    testWidgets('1. Empty State - Renders illustration and No favorites yet message', (tester) async {
-      final homeBloc = HomeBloc(repository: FakeRecipeRepo());
-      final cartBloc = CartBloc();
+    testWidgets(
+      '1. Empty State - Renders illustration and No favorites yet message',
+      (tester) async {
+        final homeBloc = HomeBloc(repository: FakeRecipeRepo());
+        final cartBloc = CartBloc();
 
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<HomeBloc>.value(value: homeBloc),
-            BlocProvider<CartBloc>.value(value: cartBloc),
-          ],
-          child: const MaterialApp(
-            home: FavoritesScreen(),
+        await tester.pumpWidget(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<HomeBloc>.value(value: homeBloc),
+              BlocProvider<CartBloc>.value(value: cartBloc),
+            ],
+            child: const MaterialApp(home: FavoritesScreen()),
           ),
-        ),
-      );
+        );
 
-      expect(find.text('My Favorites'), findsOneWidget);
-      expect(find.text('No favorites yet'), findsOneWidget);
-      expect(find.text('Explore Menu'), findsOneWidget);
-    });
+        expect(find.text('My Favorites'), findsOneWidget);
+        expect(find.text('No favorites yet'), findsOneWidget);
+        expect(find.text('Explore Menu'), findsOneWidget);
+      },
+    );
 
-    testWidgets('2. Populated State - Displays favorite recipe and supports removal with UNDO',
-        (tester) async {
-      final homeBloc = HomeBloc(repository: FakeRecipeRepo());
-      final cartBloc = CartBloc();
+    testWidgets(
+      '2. Populated State - Displays favorite recipe and supports removal with UNDO',
+      (tester) async {
+        final homeBloc = HomeBloc(repository: FakeRecipeRepo());
+        final cartBloc = CartBloc();
 
-      // Seed favorite
-      homeBloc.emit(homeBloc.state.copyWith(favorites: [testRecipe]));
+        homeBloc.emit(homeBloc.state.copyWith(favorites: [testRecipe]));
 
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<HomeBloc>.value(value: homeBloc),
-            BlocProvider<CartBloc>.value(value: cartBloc),
-          ],
-          child: const MaterialApp(
-            home: FavoritesScreen(),
+        await tester.pumpWidget(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<HomeBloc>.value(value: homeBloc),
+              BlocProvider<CartBloc>.value(value: cartBloc),
+            ],
+            child: const MaterialApp(home: FavoritesScreen()),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      expect(find.text('1 Saved Dish'), findsOneWidget);
-      expect(find.text('Classic Margherita Pizza'), findsOneWidget);
-      expect(find.text('\$20.0'), findsOneWidget);
+        expect(find.text('1 Saved Dish'), findsOneWidget);
+        expect(find.text('Classic Margherita Pizza'), findsOneWidget);
+        expect(find.text('\$20.0'), findsOneWidget);
 
-      // Tap active heart icon on the card to remove
-      final cardHeart = find.descendant(
-        of: find.byType(FavoriteItemCard),
-        matching: find.byIcon(Icons.favorite_rounded),
-      );
-      await tester.tap(cardHeart);
-      await tester.pumpAndSettle();
+        final cardHeart = find.descendant(
+          of: find.byType(FavoriteItemCard),
+          matching: find.byIcon(Icons.favorite_rounded),
+        );
+        await tester.tap(cardHeart);
+        await tester.pumpAndSettle();
 
-      // Verify undo snackbar
-      expect(find.text('Classic Margherita Pizza removed from favorites'), findsOneWidget);
-      expect(find.text('UNDO'), findsOneWidget);
-      expect(find.text('No favorites yet'), findsOneWidget);
+        expect(
+          find.text('Classic Margherita Pizza removed from favorites'),
+          findsOneWidget,
+        );
+        expect(find.text('UNDO'), findsOneWidget);
+        expect(find.text('No favorites yet'), findsOneWidget);
 
-      // Tap UNDO
-      await tester.tap(find.text('UNDO'));
-      await tester.pumpAndSettle();
+        await tester.tap(find.text('UNDO'));
+        await tester.pumpAndSettle();
 
-      expect(find.text('Classic Margherita Pizza'), findsOneWidget);
-    });
+        expect(find.text('Classic Margherita Pizza'), findsOneWidget);
+      },
+    );
 
-    testWidgets('3. Navigation - Tapping favorites in HomeScreen pushes FavoritesScreen without provider error',
-        (tester) async {
-      final authBloc = AuthBloc(repository: FakeAuthRepo());
-      final homeBloc = HomeBloc(repository: FakeRecipeRepo());
-      final cartBloc = CartBloc();
+    testWidgets(
+      '3. Navigation - Tapping favorites in HomeScreen pushes FavoritesScreen without provider error',
+      (tester) async {
+        final authBloc = AuthBloc(repository: FakeAuthRepo());
+        final homeBloc = HomeBloc(repository: FakeRecipeRepo());
+        final cartBloc = CartBloc();
 
-      await tester.pumpWidget(
-        MultiBlocProvider(
-          providers: [
-            BlocProvider<AuthBloc>.value(value: authBloc),
-            BlocProvider<HomeBloc>.value(value: homeBloc),
-            BlocProvider<CartBloc>.value(value: cartBloc),
-          ],
-          child: const MaterialApp(
-            home: HomeScreen(
-              user: AuthUser(
-                id: 1,
-                username: 'emilys',
-                email: 'emilys@test.com',
-                firstName: 'Emily',
-                lastName: 'Johnson',
+        await tester.pumpWidget(
+          MultiBlocProvider(
+            providers: [
+              BlocProvider<AuthBloc>.value(value: authBloc),
+              BlocProvider<HomeBloc>.value(value: homeBloc),
+              BlocProvider<CartBloc>.value(value: cartBloc),
+            ],
+            child: const MaterialApp(
+              home: HomeScreen(
+                user: AuthUser(
+                  id: 1,
+                  username: 'emilys',
+                  email: 'emilys@test.com',
+                  firstName: 'Emily',
+                  lastName: 'Johnson',
+                ),
               ),
             ),
           ),
-        ),
-      );
-      await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
 
-      // Tap on Favorites tab (in CurvedBottomNavBar)
-      final favNavIcon = find.descendant(
-        of: find.byType(CurvedBottomNavBar),
-        matching: find.byType(SvgPicture),
-      );
-      expect(favNavIcon, findsNWidgets(5));
-      await tester.tap(favNavIcon.at(2));
-      await tester.pumpAndSettle();
+        final favNavIcon = find.descendant(
+          of: find.byType(CurvedBottomNavBar),
+          matching: find.byType(SvgPicture),
+        );
+        expect(favNavIcon, findsNWidgets(5));
+        await tester.tap(favNavIcon.at(2));
+        await tester.pumpAndSettle();
 
-      // Expect FavoritesScreen is opened successfully
-      expect(find.text('My Favorites'), findsOneWidget);
-      expect(find.byType(FavoritesScreen), findsOneWidget);
-    });
+        expect(find.text('My Favorites'), findsOneWidget);
+        expect(find.byType(FavoritesScreen), findsOneWidget);
+      },
+    );
   });
 }
-

@@ -3,12 +3,9 @@ import '../constants/api_endpoints.dart';
 import '../storage/secure_storage_service.dart';
 import 'auth_interceptor.dart';
 
-/// Centralized Dio networking factory with custom configuration and AuthInterceptor.
 class DioClient {
   DioClient._();
 
-  /// Creates a configured [Dio] instance with standard timeouts, base URL,
-  /// and the [AuthInterceptor] attached.
   static Dio createDio({
     SecureStorageService? storageService,
     String? baseUrl,

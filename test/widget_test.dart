@@ -13,7 +13,10 @@ class MockSecureStorageService extends SecureStorageService {
   Future<String?> getUserData() async => null;
 
   @override
-  Future<void> saveTokens({required String accessToken, String? refreshToken}) async {}
+  Future<void> saveTokens({
+    required String accessToken,
+    String? refreshToken,
+  }) async {}
 
   @override
   Future<void> saveUserData(String userJson) async {}
@@ -54,7 +57,9 @@ class FakeAuthRepository extends AuthRepository {
 }
 
 void main() {
-  testWidgets('Renders LoginScreen with expected form fields', (WidgetTester tester) async {
+  testWidgets('Renders LoginScreen with expected form fields', (
+    WidgetTester tester,
+  ) async {
     final fakeRepo = FakeAuthRepository();
 
     await tester.pumpWidget(BictreeFoodApp(authRepository: fakeRepo));

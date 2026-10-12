@@ -5,7 +5,6 @@ import '../../../core/constants/app_text_styles.dart';
 import '../../../core/errors/failures.dart';
 import '../../../core/widgets/custom_primary_button.dart';
 
-/// Friendly, beautifully illustrated error screen for network and server failures.
 class FriendlyErrorView extends StatelessWidget {
   final Failure? failure;
   final String? errorMessage;
@@ -30,22 +29,22 @@ class FriendlyErrorView extends StatelessWidget {
     final IconData mainIcon = isOffline
         ? Icons.wifi_off_rounded
         : isServer
-            ? Icons.cloud_off_rounded
-            : Icons.restaurant_rounded;
+        ? Icons.cloud_off_rounded
+        : Icons.restaurant_rounded;
 
     final String title = isOffline
         ? 'No Internet Connection'
         : isServer
-            ? 'Kitchen Servers Are Busy'
-            : 'Couldn\'t Load The Menu';
+        ? 'Kitchen Servers Are Busy'
+        : 'Couldn\'t Load The Menu';
 
     final String description = errorMessage != null && errorMessage!.isNotEmpty
         ? errorMessage!
         : isOffline
-            ? 'We couldn\'t connect to our food servers. Please verify your Wi-Fi or mobile data connection and try again.'
-            : isServer
-                ? 'Our kitchen servers encountered a temporary issue. Our chefs are working on it—please retry shortly.'
-                : 'An unexpected issue occurred while fetching dishes. Tap retry to reconnect.';
+        ? 'We couldn\'t connect to our food servers. Please verify your Wi-Fi or mobile data connection and try again.'
+        : isServer
+        ? 'Our kitchen servers encountered a temporary issue. Our chefs are working on it—please retry shortly.'
+        : 'An unexpected issue occurred while fetching dishes. Tap retry to reconnect.';
 
     return Center(
       child: SingleChildScrollView(
@@ -53,7 +52,6 @@ class FriendlyErrorView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Friendly Decorative Icon Container
             Container(
               width: 110,
               height: 110,
@@ -62,15 +60,9 @@ class FriendlyErrorView extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFFFFF3EB),
-                    const Color(0xFFFFE0D0),
-                  ],
+                  colors: [const Color(0xFFFFF3EB), const Color(0xFFFFE0D0)],
                 ),
-                border: Border.all(
-                  color: const Color(0xFFFFD1BC),
-                  width: 2.0,
-                ),
+                border: Border.all(color: const Color(0xFFFFD1BC), width: 2.0),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primaryOrange.withValues(alpha: 0.12),
@@ -80,16 +72,11 @@ class FriendlyErrorView extends StatelessWidget {
                 ],
               ),
               child: Center(
-                child: Icon(
-                  mainIcon,
-                  size: 52,
-                  color: AppColors.primaryOrange,
-                ),
+                child: Icon(mainIcon, size: 52, color: AppColors.primaryOrange),
               ),
             ),
             const SizedBox(height: 24.0),
 
-            // Friendly Title
             Text(
               title,
               textAlign: TextAlign.center,
@@ -101,7 +88,6 @@ class FriendlyErrorView extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
 
-            // Helpful description
             Text(
               description,
               textAlign: TextAlign.center,
@@ -114,7 +100,6 @@ class FriendlyErrorView extends StatelessWidget {
             ),
             const SizedBox(height: 28.0),
 
-            // Primary Retry Button
             CustomPrimaryButton(
               text: 'Try Again',
               width: 200,

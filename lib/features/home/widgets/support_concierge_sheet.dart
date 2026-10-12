@@ -47,7 +47,11 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
     UIHelpers.showTimedSnackBar(
       context,
       message: '$label copied to clipboard: $text',
-      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+      icon: const Icon(
+        Icons.check_circle_rounded,
+        color: Color(0xFF4CAF50),
+        size: 20,
+      ),
       duration: const Duration(seconds: 3),
       progressColor: AppColors.primaryOrange,
     );
@@ -57,7 +61,11 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
     UIHelpers.showTimedSnackBar(
       context,
       message: 'Connecting to VIP Foodie Concierge... Average wait: < 30s',
-      icon: const Icon(Icons.chat_bubble_outline_rounded, color: AppColors.headerYellow, size: 20),
+      icon: const Icon(
+        Icons.chat_bubble_outline_rounded,
+        color: AppColors.headerYellow,
+        size: 20,
+      ),
       duration: const Duration(seconds: 3),
       progressColor: AppColors.primaryOrange,
     );
@@ -85,7 +93,6 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Top Navigation Row with Back Button, Drag Bar, and Coming Soon tag
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -123,7 +130,10 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFECE5),
                       borderRadius: BorderRadius.circular(14),
@@ -143,9 +153,11 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
               ),
               const SizedBox(height: 16),
 
-              // VIP Badge with Coming Soon indicator
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFE8F5E9), Color(0xFFC8E6C9)],
@@ -179,7 +191,6 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
               ),
               const SizedBox(height: 18),
 
-              // Layered Glowing Avatar with support.svg
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -203,7 +214,9 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF2E7D32).withValues(alpha: 0.35),
+                          color: const Color(
+                            0xFF2E7D32,
+                          ).withValues(alpha: 0.35),
                           blurRadius: 18,
                           offset: const Offset(0, 6),
                         ),
@@ -215,14 +228,16 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                       width: 32,
                       height: 32,
                       fit: BoxFit.contain,
-                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 18),
 
-              // Title
               Text(
                 'Customer Care & Concierge',
                 textAlign: TextAlign.center,
@@ -233,7 +248,6 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
               ),
               const SizedBox(height: 8),
 
-              // Description
               Text(
                 'Have a question about your order, delivery time, or need dining assistance? We are here around the clock to ensure you have a seamless experience.',
                 textAlign: TextAlign.center,
@@ -243,10 +257,12 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                   color: AppColors.textSecondary,
                 ),
               ),
-              // Quick View Coming Soon Callout
               Container(
                 margin: const EdgeInsets.only(top: 14),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF8E1),
                   borderRadius: BorderRadius.circular(14),
@@ -276,7 +292,6 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
               ),
               const SizedBox(height: 20),
 
-              // Quick Contact Channels
               _buildContactCard(
                 icon: Icons.chat_bubble_rounded,
                 iconColor: AppColors.primaryOrange,
@@ -296,7 +311,8 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                 subtitle: '1-800-BICTREE (242-8733)',
                 badgeText: 'Coming Soon',
                 badgeColor: const Color(0xFF1976D2),
-                onTap: () => _copyToClipboard('1-800-242-8733', 'Hotline Number'),
+                onTap: () =>
+                    _copyToClipboard('1-800-242-8733', 'Hotline Number'),
               ),
               const SizedBox(height: 10),
               _buildContactCard(
@@ -307,11 +323,13 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                 subtitle: 'concierge@bictreefood.com',
                 badgeText: 'Coming Soon',
                 badgeColor: const Color(0xFF8E24AA),
-                onTap: () => _copyToClipboard('concierge@bictreefood.com', 'Email Address'),
+                onTap: () => _copyToClipboard(
+                  'concierge@bictreefood.com',
+                  'Email Address',
+                ),
               ),
               const SizedBox(height: 20),
 
-              // FAQs Section
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -330,7 +348,9 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                     color: const Color(0xFFF9F9FB),
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
-                      color: isExpanded ? AppColors.primaryOrange.withValues(alpha: 0.3) : const Color(0xFFEEEEEE),
+                      color: isExpanded
+                          ? AppColors.primaryOrange.withValues(alpha: 0.3)
+                          : const Color(0xFFEEEEEE),
                     ),
                   ),
                   child: InkWell(
@@ -341,7 +361,10 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                     },
                     borderRadius: BorderRadius.circular(14),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 12,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -364,7 +387,9 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                                 ),
                               ),
                               Icon(
-                                isExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                                isExpanded
+                                    ? Icons.keyboard_arrow_up_rounded
+                                    : Icons.keyboard_arrow_down_rounded,
                                 color: Colors.grey[500],
                                 size: 20,
                               ),
@@ -392,7 +417,6 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
               }),
               const SizedBox(height: 14),
 
-              // Close Button
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -473,7 +497,10 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                       ),
                       const SizedBox(width: 6),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: badgeColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(6),
@@ -492,15 +519,16 @@ class _SupportConciergeSheetState extends State<SupportConciergeSheet> {
                   const SizedBox(height: 3),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: Colors.grey,
+            ),
           ],
         ),
       ),

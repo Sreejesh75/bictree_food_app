@@ -81,7 +81,10 @@ class RecipeCard extends StatelessWidget {
                       top: 8.0,
                       left: 8.0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 3.5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 7.0,
+                          vertical: 3.5,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.95),
                           borderRadius: BorderRadius.circular(14.0),
@@ -128,7 +131,10 @@ class RecipeCard extends StatelessWidget {
                       right: 8.0,
                       bottom: 8.0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.5),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 3.5,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primaryOrange,
                           borderRadius: BorderRadius.circular(12.0),
@@ -181,7 +187,9 @@ class RecipeCard extends StatelessWidget {
                       const SizedBox(width: 6.0),
                       Text(
                         '•  ${recipe.cookTimeMinutes} mins',
-                        style: AppTextStyles.bodySubtitle.copyWith(fontSize: 11.0),
+                        style: AppTextStyles.bodySubtitle.copyWith(
+                          fontSize: 11.0,
+                        ),
                       ),
                     ],
                   ),

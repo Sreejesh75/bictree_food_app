@@ -38,7 +38,6 @@ class FavoriteItemCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // Thumbnail with Hero
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
               child: Hero(
@@ -52,14 +51,16 @@ class FavoriteItemCard extends StatelessWidget {
                     width: 84,
                     height: 84,
                     color: const Color(0xFFFBF1D5),
-                    child: const Icon(Icons.fastfood, color: AppColors.primaryOrange),
+                    child: const Icon(
+                      Icons.fastfood,
+                      color: AppColors.primaryOrange,
+                    ),
                   ),
                 ),
               ),
             ),
             const SizedBox(width: 14),
 
-            // Recipe info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +68,10 @@ class FavoriteItemCard extends StatelessWidget {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 6,
+                          vertical: 2,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFF4EB),
                           borderRadius: BorderRadius.circular(6),
@@ -75,7 +79,11 @@ class FavoriteItemCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.star_rounded, size: 13, color: Color(0xFFFFB300)),
+                            const Icon(
+                              Icons.star_rounded,
+                              size: 13,
+                              color: Color(0xFFFFB300),
+                            ),
                             const SizedBox(width: 3),
                             Text(
                               recipe.rating.toStringAsFixed(1),
@@ -128,7 +136,10 @@ class FavoriteItemCard extends StatelessWidget {
                           backgroundColor: const Color(0xFFFFF4EB),
                           foregroundColor: AppColors.primaryOrange,
                           elevation: 0,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
+                          ),
                           minimumSize: const Size(0, 32),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -138,7 +149,10 @@ class FavoriteItemCard extends StatelessWidget {
                         icon: const Icon(Icons.shopping_bag_outlined, size: 14),
                         label: const Text(
                           'Add',
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
@@ -149,7 +163,6 @@ class FavoriteItemCard extends StatelessWidget {
 
             const SizedBox(width: 6),
 
-            // Active Heart Button
             GestureDetector(
               onTap: onToggleFavorite,
               child: Container(

@@ -1,6 +1,5 @@
 import 'recipe_model.dart';
 
-/// Domain result representing a paginated batch of recipes.
 class RecipePageResult {
   final List<RecipeModel> recipes;
   final int total;

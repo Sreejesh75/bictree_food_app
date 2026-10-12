@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
 
-/// Friendly empty view shown when search yields 0 items or a category has no items.
 class FriendlyEmptyView extends StatelessWidget {
   final String searchQuery;
   final String? category;
@@ -37,17 +36,13 @@ class FriendlyEmptyView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Friendly Icon Container
             Container(
               width: 100,
               height: 100,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: const Color(0xFFFFF7ED),
-                border: Border.all(
-                  color: const Color(0xFFFFD8A8),
-                  width: 2.0,
-                ),
+                border: Border.all(color: const Color(0xFFFFD8A8), width: 2.0),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.primaryOrange.withValues(alpha: 0.1),
@@ -58,7 +53,9 @@ class FriendlyEmptyView extends StatelessWidget {
               ),
               child: Center(
                 child: Icon(
-                  isSearch ? Icons.search_off_rounded : Icons.restaurant_menu_rounded,
+                  isSearch
+                      ? Icons.search_off_rounded
+                      : Icons.restaurant_menu_rounded,
                   size: 48,
                   color: AppColors.primaryOrange,
                 ),
@@ -66,7 +63,6 @@ class FriendlyEmptyView extends StatelessWidget {
             ),
             const SizedBox(height: 20.0),
 
-            // Friendly Title
             Text(
               isSearch ? 'No Dishes Found' : 'No Recipes In This Category',
               textAlign: TextAlign.center,
@@ -78,7 +74,6 @@ class FriendlyEmptyView extends StatelessWidget {
             ),
             const SizedBox(height: 8.0),
 
-            // Subtitle
             Text(
               isSearch
                   ? 'We couldn\'t find any meals matching "$searchQuery". Try exploring popular food suggestions below.'
@@ -93,7 +88,6 @@ class FriendlyEmptyView extends StatelessWidget {
             ),
             const SizedBox(height: 22.0),
 
-            // Popular Suggestions (if searching)
             if (isSearch && onSuggestionTap != null) ...[
               Text(
                 'POPULAR SEARCHES',
@@ -129,7 +123,10 @@ class FriendlyEmptyView extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(item['icon']!, style: const TextStyle(fontSize: 14)),
+                          Text(
+                            item['icon']!,
+                            style: const TextStyle(fontSize: 14),
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             item['label']!,
@@ -148,7 +145,6 @@ class FriendlyEmptyView extends StatelessWidget {
               const SizedBox(height: 22.0),
             ],
 
-            // Clear Button
             OutlinedButton.icon(
               onPressed: onClearSearch,
               style: OutlinedButton.styleFrom(

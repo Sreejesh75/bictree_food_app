@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// Pure domain entity representing a food recipe.
 class RecipeModel extends Equatable {
   final int id;
   final String name;
@@ -42,9 +41,7 @@ class RecipeModel extends Equatable {
     this.isFavorite = false,
   });
 
-  RecipeModel copyWith({
-    bool? isFavorite,
-  }) {
+  RecipeModel copyWith({bool? isFavorite}) {
     return RecipeModel(
       id: id,
       name: name,
@@ -68,7 +65,9 @@ class RecipeModel extends Equatable {
   }
 
   factory RecipeModel.fromJson(Map<String, dynamic> json) {
-    final idVal = json['id'] is int ? json['id'] as int : int.tryParse(json['id']?.toString() ?? '1') ?? 1;
+    final idVal = json['id'] is int
+        ? json['id'] as int
+        : int.tryParse(json['id']?.toString() ?? '1') ?? 1;
     final rawPrice = json['price'] != null
         ? (json['price'] as num).toDouble()
         : (10.0 + (idVal * 7.25) % 95.0);
@@ -76,11 +75,13 @@ class RecipeModel extends Equatable {
     return RecipeModel(
       id: idVal,
       name: json['name'] as String? ?? 'Delicious Dish',
-      ingredients: (json['ingredients'] as List<dynamic>?)
+      ingredients:
+          (json['ingredients'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
-      instructions: (json['instructions'] as List<dynamic>?)
+      instructions:
+          (json['instructions'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
@@ -90,12 +91,17 @@ class RecipeModel extends Equatable {
       difficulty: json['difficulty'] as String? ?? 'Easy',
       cuisine: json['cuisine'] as String? ?? 'International',
       caloriesPerServing: json['caloriesPerServing'] as int? ?? 250,
-      tags: (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e.toString()).toList() ??
+          [],
       userId: json['userId'] as int? ?? 1,
       image: json['image'] as String? ?? '',
-      rating: (json['rating'] is num) ? (json['rating'] as num).toDouble() : 4.5,
+      rating: (json['rating'] is num)
+          ? (json['rating'] as num).toDouble()
+          : 4.5,
       reviewCount: json['reviewCount'] as int? ?? 20,
-      mealType: (json['mealType'] as List<dynamic>?)
+      mealType:
+          (json['mealType'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],
@@ -130,12 +136,5 @@ class RecipeModel extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        id,
-        name,
-        image,
-        rating,
-        price,
-        isFavorite,
-      ];
+  List<Object?> get props => [id, name, image, rating, price, isFavorite];
 }

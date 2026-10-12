@@ -14,7 +14,9 @@ class CartDialogs {
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Clear Cart?'),
-        content: const Text('Are you sure you want to remove all items from your cart?'),
+        content: const Text(
+          'Are you sure you want to remove all items from your cart?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -69,7 +71,10 @@ class CartDialogs {
               Text(
                 'Your delicious food is being prepared and will be delivered shortly.\nTotal Paid: \$${total.toStringAsFixed(2)}',
                 textAlign: TextAlign.center,
-                style: AppTextStyles.bodySubtitle.copyWith(fontSize: 13.5, height: 1.4),
+                style: AppTextStyles.bodySubtitle.copyWith(
+                  fontSize: 13.5,
+                  height: 1.4,
+                ),
               ),
               const SizedBox(height: 22),
               CustomPrimaryButton(

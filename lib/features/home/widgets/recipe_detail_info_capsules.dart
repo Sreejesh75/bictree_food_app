@@ -5,10 +5,7 @@ import '../models/recipe_model.dart';
 class RecipeDetailInfoCapsules extends StatelessWidget {
   final RecipeModel recipe;
 
-  const RecipeDetailInfoCapsules({
-    super.key,
-    required this.recipe,
-  });
+  const RecipeDetailInfoCapsules({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +85,7 @@ class RecipeDetailInfoCapsules extends StatelessWidget {
               ),
               Text(
                 sublabel,
-                style: const TextStyle(
-                  fontSize: 10,
-                  color: Color(0xFF8A8A8E),
-                ),
+                style: const TextStyle(fontSize: 10, color: Color(0xFF8A8A8E)),
               ),
             ],
           ),

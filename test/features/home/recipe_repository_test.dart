@@ -49,7 +49,7 @@ class FakeRemoteDataSource implements RecipeRemoteDataSource {
         'reviewCount': 42,
         'mealType': ['Lunch'],
         'price': 18.00,
-      }
+      },
     ],
     'total': 50,
     'skip': 0,
@@ -110,57 +110,67 @@ void main() {
       );
     });
 
-    test('1. getRecipes successfully fetches and parses recipes from remote data source', () async {
-      final result = await repository.getRecipes(limit: 10, skip: 0);
+    test(
+      '1. getRecipes successfully fetches and parses recipes from remote data source',
+      () async {
+        final result = await repository.getRecipes(limit: 10, skip: 0);
 
-      expect(result, isA<RecipePageResult>());
-      expect(result.recipes.length, equals(2));
-      expect(result.recipes.first.name, equals('Classic Margherita Pizza'));
-      expect(result.total, equals(50));
-      expect(result.hasMore, isTrue);
-      expect(result.isFromCache, isFalse);
-    });
+        expect(result, isA<RecipePageResult>());
+        expect(result.recipes.length, equals(2));
+        expect(result.recipes.first.name, equals('Classic Margherita Pizza'));
+        expect(result.total, equals(50));
+        expect(result.hasMore, isTrue);
+        expect(result.isFromCache, isFalse);
+      },
+    );
 
-    test('2. getRecipes caches recipes to local data source on initial fetch (skip = 0)', () async {
-      await repository.getRecipes(limit: 10, skip: 0);
+    test(
+      '2. getRecipes caches recipes to local data source on initial fetch (skip = 0)',
+      () async {
+        await repository.getRecipes(limit: 10, skip: 0);
 
-      expect(localDataSource.cached.length, equals(2));
-      expect(localDataSource.cached.first.id, equals(1));
-    });
+        expect(localDataSource.cached.length, equals(2));
+        expect(localDataSource.cached.first.id, equals(1));
+      },
+    );
 
-    test('3. getRecipes falls back to cached recipes when remote data source fails', () async {
-      // First populate cache
-      localDataSource.cached = [
-        const RecipeModel(
-          id: 99,
-          name: 'Cached Offline Salad',
-          ingredients: ['Lettuce'],
-          instructions: ['Mix'],
-          prepTimeMinutes: 5,
-          cookTimeMinutes: 0,
-          servings: 1,
-          difficulty: 'Easy',
-          cuisine: 'Healthy',
-          caloriesPerServing: 90,
-          tags: ['Salad'],
-          userId: 1,
-          image: '',
-          rating: 4.5,
-          reviewCount: 10,
-          mealType: ['Lunch'],
-          price: 12.0,
-        ),
-      ];
+    test(
+      '3. getRecipes falls back to cached recipes when remote data source fails',
+      () async {
+        localDataSource.cached = [
+          const RecipeModel(
+            id: 99,
+            name: 'Cached Offline Salad',
+            ingredients: ['Lettuce'],
+            instructions: ['Mix'],
+            prepTimeMinutes: 5,
+            cookTimeMinutes: 0,
+            servings: 1,
+            difficulty: 'Easy',
+            cuisine: 'Healthy',
+            caloriesPerServing: 90,
+            tags: ['Salad'],
+            userId: 1,
+            image: '',
+            rating: 4.5,
+            reviewCount: 10,
+            mealType: ['Lunch'],
+            price: 12.0,
+          ),
+        ];
 
-      // Simulate remote network failure
-      remoteDataSource.shouldThrow = true;
+        remoteDataSource.shouldThrow = true;
 
-      final fallbackResult = await repository.getRecipes(limit: 10, skip: 0);
+        final fallbackResult = await repository.getRecipes(limit: 10, skip: 0);
 
-      expect(fallbackResult.isFromCache, isTrue);
-      expect(fallbackResult.recipes.length, equals(1));
-      expect(fallbackResult.recipes.first.name, equals('Cached Offline Salad'));
-    });
+        expect(fallbackResult.isFromCache, isTrue);
+        expect(fallbackResult.recipes.length, equals(1));
+        expect(
+          fallbackResult.recipes.first.name,
+          equals('Cached Offline Salad'),
+        );
+      },
+    );
 
     test('4. searchRecipes filters recipes matching query term', () async {
       final results = await repository.searchRecipes('Pizza');

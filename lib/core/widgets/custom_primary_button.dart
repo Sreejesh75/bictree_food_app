@@ -92,10 +92,7 @@ class CustomPrimaryButton extends StatelessWidget {
                       ),
                     ),
                   ),
-                  if (icon != null) ...[
-                    const SizedBox(width: 8.0),
-                    icon!,
-                  ],
+                  if (icon != null) ...[const SizedBox(width: 8.0), icon!],
                 ],
               ),
       ),

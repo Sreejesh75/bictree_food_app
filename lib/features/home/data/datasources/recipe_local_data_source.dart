@@ -10,7 +10,7 @@ class RecipeLocalDataSourceImpl implements RecipeLocalDataSource {
   final HiveRecipeCacheService cacheService;
 
   RecipeLocalDataSourceImpl({HiveRecipeCacheService? cacheService})
-      : cacheService = cacheService ?? HiveRecipeCacheService();
+    : cacheService = cacheService ?? HiveRecipeCacheService();
 
   @override
   Future<List<RecipeModel>> getCachedRecipes() =>

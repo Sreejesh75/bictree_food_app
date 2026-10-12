@@ -77,7 +77,10 @@ class CartItemTile extends StatelessWidget {
                   width: 72,
                   height: 72,
                   color: const Color(0xFFFBF1D5),
-                  child: const Icon(Icons.fastfood, color: AppColors.primaryOrange),
+                  child: const Icon(
+                    Icons.fastfood,
+                    color: AppColors.primaryOrange,
+                  ),
                 ),
               ),
             ),
@@ -109,7 +112,6 @@ class CartItemTile extends StatelessWidget {
                 ],
               ),
             ),
-            // Stepper [-] QTY [+]
             Container(
               height: 34,
               decoration: BoxDecoration(
@@ -130,9 +132,13 @@ class CartItemTile extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        cartItem.quantity > 1 ? Icons.remove : Icons.delete_outline,
+                        cartItem.quantity > 1
+                            ? Icons.remove
+                            : Icons.delete_outline,
                         size: 14,
-                        color: cartItem.quantity > 1 ? AppColors.textDark : Colors.red,
+                        color: cartItem.quantity > 1
+                            ? AppColors.textDark
+                            : Colors.red,
                       ),
                     ),
                   ),
@@ -156,7 +162,11 @@ class CartItemTile extends StatelessWidget {
                         color: Colors.white,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.add, size: 14, color: AppColors.textDark),
+                      child: const Icon(
+                        Icons.add,
+                        size: 14,
+                        color: AppColors.textDark,
+                      ),
                     ),
                   ),
                 ],

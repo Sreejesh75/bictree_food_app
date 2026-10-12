@@ -5,10 +5,7 @@ import '../../../../core/network/dio_client.dart';
 import '../../domain/entities/auth_user.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<AuthUser> login({
-    required String username,
-    required String password,
-  });
+  Future<AuthUser> login({required String username, required String password});
 
   Future<AuthUser?> getMe({required String token});
 
@@ -31,11 +28,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }) async {
     final response = await dio.post(
       ApiEndpoints.login,
-      data: {
-        'username': username,
-        'password': password,
-        'expiresInMins': 60,
-      },
+      data: {'username': username, 'password': password, 'expiresInMins': 60},
     );
 
     if (response.statusCode == 200) {
@@ -52,9 +45,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AuthUser?> getMe({required String token}) async {
     final response = await dio.get(
       ApiEndpoints.authMe,
-      options: Options(
-        headers: {'Authorization': 'Bearer $token'},
-      ),
+      options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
 
     if (response.statusCode == 200) {

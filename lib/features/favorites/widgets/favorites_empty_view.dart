@@ -5,10 +5,7 @@ import '../../../core/constants/app_text_styles.dart';
 class FavoritesEmptyView extends StatelessWidget {
   final VoidCallback? onExploreMenu;
 
-  const FavoritesEmptyView({
-    super.key,
-    this.onExploreMenu,
-  });
+  const FavoritesEmptyView({super.key, this.onExploreMenu});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +16,6 @@ class FavoritesEmptyView extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
 
-          // Layered Aura Illustration with Floating Heart Badges
           Center(
             child: SizedBox(
               width: 240,
@@ -27,7 +23,6 @@ class FavoritesEmptyView extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Outer subtle radial aura
                   Container(
                     width: 190,
                     height: 190,
@@ -42,7 +37,6 @@ class FavoritesEmptyView extends StatelessWidget {
                     ),
                   ),
 
-                  // Middle warm halo
                   Container(
                     width: 136,
                     height: 136,
@@ -51,7 +45,9 @@ class FavoritesEmptyView extends StatelessWidget {
                       color: const Color(0xFFFFEBEE).withValues(alpha: 0.85),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFE53935).withValues(alpha: 0.10),
+                          color: const Color(
+                            0xFFE53935,
+                          ).withValues(alpha: 0.10),
                           blurRadius: 24,
                           spreadRadius: 4,
                         ),
@@ -59,7 +55,6 @@ class FavoritesEmptyView extends StatelessWidget {
                     ),
                   ),
 
-                  // Core warm glowing circle
                   Container(
                     width: 96,
                     height: 96,
@@ -68,14 +63,13 @@ class FavoritesEmptyView extends StatelessWidget {
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFFFF9F9),
-                          Color(0xFFFFCDD2),
-                        ],
+                        colors: [Color(0xFFFFF9F9), Color(0xFFFFCDD2)],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFE53935).withValues(alpha: 0.25),
+                          color: const Color(
+                            0xFFE53935,
+                          ).withValues(alpha: 0.25),
                           blurRadius: 18,
                           offset: const Offset(0, 8),
                         ),
@@ -88,21 +82,18 @@ class FavoritesEmptyView extends StatelessWidget {
                     ),
                   ),
 
-                  // Floating badge top-left: 💖 Loved
                   Positioned(
                     top: 14,
                     left: 6,
                     child: _buildFloatingBadge('💖', 'Loved Bites'),
                   ),
 
-                  // Floating badge top-right: ⭐ 4.9
                   Positioned(
                     top: 20,
                     right: 4,
                     child: _buildFloatingBadge('⭐', 'Top Rated'),
                   ),
 
-                  // Floating badge bottom-right: ⚡ Quick
                   Positioned(
                     bottom: 16,
                     right: 14,
@@ -115,7 +106,6 @@ class FavoritesEmptyView extends StatelessWidget {
 
           const SizedBox(height: 22),
 
-          // Friendly pill badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
@@ -142,7 +132,6 @@ class FavoritesEmptyView extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Screen Heading
           Text(
             'No favorites yet',
             style: AppTextStyles.screenHeading.copyWith(
@@ -154,7 +143,6 @@ class FavoritesEmptyView extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Subtitle description
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 320),
             child: Text(
@@ -170,7 +158,6 @@ class FavoritesEmptyView extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // Premium "Explore Menu" CTA Button
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28),
@@ -188,7 +175,10 @@ class FavoritesEmptyView extends StatelessWidget {
                 backgroundColor: AppColors.primaryOrange,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 15),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 36,
+                  vertical: 15,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28),
                 ),
@@ -213,10 +203,11 @@ class FavoritesEmptyView extends StatelessWidget {
 
           const SizedBox(height: 36),
 
-          // Popular choices divider
           Row(
             children: [
-              const Expanded(child: Divider(color: Color(0xFFEBEBEB), thickness: 1)),
+              const Expanded(
+                child: Divider(color: Color(0xFFEBEBEB), thickness: 1),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text(
@@ -229,13 +220,14 @@ class FavoritesEmptyView extends StatelessWidget {
                   ),
                 ),
               ),
-              const Expanded(child: Divider(color: Color(0xFFEBEBEB), thickness: 1)),
+              const Expanded(
+                child: Divider(color: Color(0xFFEBEBEB), thickness: 1),
+              ),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          // Category Shortcut Pills
           Wrap(
             spacing: 10,
             runSpacing: 10,

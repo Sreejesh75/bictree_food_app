@@ -28,9 +28,7 @@ class CurvedBottomNavBar extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         color: AppColors.bottomNavBackground,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(30.0),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
       ),
       padding: EdgeInsets.only(
         top: 20.0,
@@ -56,7 +54,9 @@ class CurvedBottomNavBar extends StatelessWidget {
                   height: 22.0,
                   fit: BoxFit.contain,
                   colorFilter: ColorFilter.mode(
-                    isSelected ? Colors.white : Colors.white.withValues(alpha: 0.85),
+                    isSelected
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.85),
                     BlendMode.srcIn,
                   ),
                 ),

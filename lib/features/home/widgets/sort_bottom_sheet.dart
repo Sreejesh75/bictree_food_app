@@ -40,7 +40,6 @@ class SortBottomSheet extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Drag handle
             Center(
               child: Container(
                 width: 44,
@@ -122,7 +121,9 @@ class SortBottomSheet extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? AppColors.primaryOrange : const Color(0xFF8A8A8E),
+              color: isSelected
+                  ? AppColors.primaryOrange
+                  : const Color(0xFF8A8A8E),
               size: 22,
             ),
             const SizedBox(width: 14.0),
@@ -134,8 +135,12 @@ class SortBottomSheet extends StatelessWidget {
                     title,
                     style: TextStyle(
                       fontSize: 14.5,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                      color: isSelected ? AppColors.primaryOrange : AppColors.textDark,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.w600,
+                      color: isSelected
+                          ? AppColors.primaryOrange
+                          : AppColors.textDark,
                     ),
                   ),
                   Text(

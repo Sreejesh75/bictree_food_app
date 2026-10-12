@@ -40,7 +40,10 @@ class CartSummaryCard extends StatelessWidget {
             style: AppTextStyles.fieldLabel.copyWith(fontSize: 15),
           ),
           const SizedBox(height: 12),
-          _buildSummaryRow('Subtotal', '\$${state.subtotal.toStringAsFixed(2)}'),
+          _buildSummaryRow(
+            'Subtotal',
+            '\$${state.subtotal.toStringAsFixed(2)}',
+          ),
           if (couponApplied)
             _buildSummaryRow(
               'Discount (30%)',
@@ -49,7 +52,9 @@ class CartSummaryCard extends StatelessWidget {
             ),
           _buildSummaryRow(
             'Delivery Fee',
-            state.hasFreeDelivery ? 'FREE' : '\$${state.deliveryFee.toStringAsFixed(2)}',
+            state.hasFreeDelivery
+                ? 'FREE'
+                : '\$${state.deliveryFee.toStringAsFixed(2)}',
             textColor: state.hasFreeDelivery ? const Color(0xFF2E7D32) : null,
           ),
           _buildSummaryRow(
@@ -91,7 +96,9 @@ class CartSummaryCard extends StatelessWidget {
             style: TextStyle(
               fontSize: isTotal ? 17 : 13.5,
               fontWeight: isTotal ? FontWeight.w800 : FontWeight.w600,
-              color: textColor ?? (isTotal ? AppColors.primaryOrange : AppColors.textDark),
+              color:
+                  textColor ??
+                  (isTotal ? AppColors.primaryOrange : AppColors.textDark),
             ),
           ),
         ],

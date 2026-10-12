@@ -15,7 +15,6 @@ import '../../features/home/models/recipe_model.dart';
 import '../../features/home/screens/home_screen.dart';
 import '../../features/home/screens/recipe_detail_screen.dart';
 
-/// App route path constants for declarative navigation with GoRouter.
 abstract class AppRoutes {
   static const login = '/login';
   static const signup = '/signup';
@@ -25,15 +24,12 @@ abstract class AppRoutes {
   static const favorites = '/favorites';
 }
 
-/// Listenable adapter that notifies GoRouter whenever the Auth stream emits.
 class GoRouterRefreshStream extends ChangeNotifier {
   late final StreamSubscription<dynamic> _subscription;
 
   GoRouterRefreshStream(Stream<dynamic> stream) {
     notifyListeners();
-    _subscription = stream.asBroadcastStream().listen(
-          (_) => notifyListeners(),
-        );
+    _subscription = stream.asBroadcastStream().listen((_) => notifyListeners());
   }
 
   @override
@@ -43,10 +39,10 @@ class GoRouterRefreshStream extends ChangeNotifier {
   }
 }
 
-final GlobalKey<NavigatorState> rootNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(
+  debugLabel: 'root',
+);
 
-/// Creates and configures the application GoRouter with auth-aware redirect guards.
 GoRouter createRouter(AuthBloc authBloc) {
   return GoRouter(
     navigatorKey: rootNavigatorKey,
@@ -59,12 +55,10 @@ GoRouter createRouter(AuthBloc authBloc) {
           location == AppRoutes.login || location == AppRoutes.signup;
 
       if (authState is AuthenticatedState) {
-        // Authenticated users on login/signup should be redirected to home
         if (isAuthRoute || location == '/') {
           return AppRoutes.home;
         }
       } else if (authState is UnauthenticatedState) {
-        // Unauthenticated users trying to access protected screens should go to login
         if (!isAuthRoute) {
           return AppRoutes.login;
         }
@@ -96,7 +90,8 @@ GoRouter createRouter(AuthBloc authBloc) {
             }
           }
           return HomeScreen(
-            user: user ??
+            user:
+                user ??
                 const AuthUser(
                   id: 0,
                   username: 'Guest',
@@ -130,10 +125,7 @@ GoRouter createRouter(AuthBloc authBloc) {
             );
           }
 
-          return RecipeDetailScreen(
-            recipe: recipe,
-            heroTag: heroTag,
-          );
+          return RecipeDetailScreen(recipe: recipe, heroTag: heroTag);
         },
       ),
       GoRoute(

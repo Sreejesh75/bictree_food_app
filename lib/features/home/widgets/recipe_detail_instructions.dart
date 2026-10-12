@@ -5,10 +5,7 @@ import '../../../core/constants/app_text_styles.dart';
 class RecipeDetailInstructions extends StatelessWidget {
   final List<String> instructions;
 
-  const RecipeDetailInstructions({
-    super.key,
-    required this.instructions,
-  });
+  const RecipeDetailInstructions({super.key, required this.instructions});
 
   @override
   Widget build(BuildContext context) {

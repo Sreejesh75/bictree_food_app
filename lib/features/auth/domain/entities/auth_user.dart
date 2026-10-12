@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-/// Pure domain entity representing an authenticated user.
 class AuthUser extends Equatable {
   final int id;
   final String username;
@@ -28,10 +27,13 @@ class AuthUser extends Equatable {
 
   factory AuthUser.fromJson(Map<String, dynamic> json) {
     return AuthUser(
-      id: json['id'] is int ? json['id'] as int : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
+      id: json['id'] is int
+          ? json['id'] as int
+          : int.tryParse(json['id']?.toString() ?? '0') ?? 0,
       username: json['username'] as String? ?? '',
       email: json['email'] as String? ?? '',
-      firstName: json['firstName'] as String? ?? json['fullName'] as String? ?? '',
+      firstName:
+          json['firstName'] as String? ?? json['fullName'] as String? ?? '',
       lastName: json['lastName'] as String? ?? '',
       gender: json['gender'] as String?,
       image: json['image'] as String?,
@@ -55,5 +57,12 @@ class AuthUser extends Equatable {
   }
 
   @override
-  List<Object?> get props => [id, username, email, firstName, lastName, accessToken];
+  List<Object?> get props => [
+    id,
+    username,
+    email,
+    firstName,
+    lastName,
+    accessToken,
+  ];
 }

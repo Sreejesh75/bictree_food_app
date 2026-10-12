@@ -43,7 +43,9 @@ void main() {
   });
 
   group('OfflineBanner Widget Tests', () {
-    testWidgets('Renders offline indicator, item count, and triggers retry', (tester) async {
+    testWidgets('Renders offline indicator, item count, and triggers retry', (
+      tester,
+    ) async {
       bool retryPressed = false;
 
       await tester.pumpWidget(
@@ -59,7 +61,10 @@ void main() {
 
       expect(find.text('Offline Mode'), findsOneWidget);
       expect(find.text('CACHED'), findsOneWidget);
-      expect(find.textContaining('Displaying 10 cached dishes'), findsOneWidget);
+      expect(
+        find.textContaining('Displaying 10 cached dishes'),
+        findsOneWidget,
+      );
       expect(find.text('Retry'), findsOneWidget);
 
       await tester.tap(find.text('Retry'));
@@ -70,7 +75,9 @@ void main() {
   });
 
   group('FriendlyErrorView Widget Tests', () {
-    testWidgets('Renders friendly network error screen and handles retry tap', (tester) async {
+    testWidgets('Renders friendly network error screen and handles retry tap', (
+      tester,
+    ) async {
       bool retryPressed = false;
 
       await tester.pumpWidget(
@@ -94,7 +101,9 @@ void main() {
       expect(retryPressed, isTrue);
     });
 
-    testWidgets('Renders friendly server error screen for ServerFailure', (tester) async {
+    testWidgets('Renders friendly server error screen for ServerFailure', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -112,7 +121,9 @@ void main() {
   });
 
   group('FriendlyEmptyView Widget Tests', () {
-    testWidgets('Renders friendly search empty state with suggestions', (tester) async {
+    testWidgets('Renders friendly search empty state with suggestions', (
+      tester,
+    ) async {
       String? tappedSuggestion;
       bool clearSearchCalled = false;
 

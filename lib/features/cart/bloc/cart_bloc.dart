@@ -27,10 +27,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     return _defaultStorageKey;
   }
 
-  Future<void> _onLoadCart(
-    LoadCartEvent event,
-    Emitter<CartState> emit,
-  ) async {
+  Future<void> _onLoadCart(LoadCartEvent event, Emitter<CartState> emit) async {
     if (event.userId != null) {
       _activeUserId = event.userId;
     }
@@ -47,9 +44,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(state.copyWith(items: items, isLoading: false));
         return;
       }
-    } catch (_) {
-      // Graceful fallback on storage errors
-    }
+    } catch (_) {}
     emit(state.copyWith(items: const [], isLoading: false));
   }
 
@@ -69,10 +64,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       );
     } else {
       currentItems.add(
-        CartItem(
-          recipe: event.recipe,
-          quantity: event.quantity,
-        ),
+        CartItem(recipe: event.recipe, quantity: event.quantity),
       );
     }
 
@@ -93,7 +85,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       if (event.quantity <= 0) {
         currentItems.removeAt(index);
       } else {
-        currentItems[index] = currentItems[index].copyWith(quantity: event.quantity);
+        currentItems[index] = currentItems[index].copyWith(
+          quantity: event.quantity,
+        );
       }
       emit(state.copyWith(items: currentItems));
       await _saveToStorage(currentItems);
@@ -116,7 +110,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     Emitter<CartState> emit,
   ) async {
     final currentItems = List<CartItem>.from(state.items);
-    if (event.index != null && event.index! >= 0 && event.index! <= currentItems.length) {
+    if (event.index != null &&
+        event.index! >= 0 &&
+        event.index! <= currentItems.length) {
       currentItems.insert(event.index!, event.item);
     } else {
       currentItems.add(event.item);

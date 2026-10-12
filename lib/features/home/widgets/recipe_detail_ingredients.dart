@@ -5,10 +5,7 @@ import '../../../core/constants/app_text_styles.dart';
 class RecipeDetailIngredients extends StatelessWidget {
   final List<String> ingredients;
 
-  const RecipeDetailIngredients({
-    super.key,
-    required this.ingredients,
-  });
+  const RecipeDetailIngredients({super.key, required this.ingredients});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +45,10 @@ class RecipeDetailIngredients extends StatelessWidget {
           children: ingredients
               .map(
                 (ing) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6.5),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6.5,
+                  ),
                   decoration: BoxDecoration(
                     color: const Color(0xFFFFF3D2),
                     borderRadius: BorderRadius.circular(12),

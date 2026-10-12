@@ -31,7 +31,9 @@ class CartPromoSection extends StatelessWidget {
           Icon(
             Icons.local_offer_outlined,
             size: 20,
-            color: isApplied ? const Color(0xFF4CAF50) : AppColors.primaryOrange,
+            color: isApplied
+                ? const Color(0xFF4CAF50)
+                : AppColors.primaryOrange,
           ),
           const SizedBox(width: 10),
           Expanded(

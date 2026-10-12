@@ -20,10 +20,7 @@ class AuthenticatedState extends AuthState {
   final AuthUser user;
   final String? successMessage;
 
-  const AuthenticatedState({
-    required this.user,
-    this.successMessage,
-  });
+  const AuthenticatedState({required this.user, this.successMessage});
 
   @override
   List<Object?> get props => [user, successMessage];

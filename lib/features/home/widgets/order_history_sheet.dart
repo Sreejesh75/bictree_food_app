@@ -32,7 +32,11 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
       UIHelpers.showTimedSnackBar(
         context,
         message: "You're on the VIP Waitlist! We'll notify you on launch.",
-        icon: const Icon(Icons.notifications_active_rounded, color: AppColors.headerYellow, size: 20),
+        icon: const Icon(
+          Icons.notifications_active_rounded,
+          color: AppColors.headerYellow,
+          size: 20,
+        ),
         duration: const Duration(seconds: 3),
         progressColor: AppColors.primaryOrange,
       );
@@ -61,7 +65,6 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Top Navigation Row with Back Button, Drag Bar, and Coming Soon tag
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -99,7 +102,10 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFFFECE5),
                       borderRadius: BorderRadius.circular(14),
@@ -119,9 +125,11 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
               ),
               const SizedBox(height: 16),
 
-              // Glowing Badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
                     colors: [Color(0xFFFFF3E0), Color(0xFFFFE0B2)],
@@ -155,7 +163,6 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
               ),
               const SizedBox(height: 18),
 
-              // Layered Glowing Avatar with history.svg
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -173,13 +180,18 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: const LinearGradient(
-                        colors: [AppColors.headerYellow, AppColors.primaryOrange],
+                        colors: [
+                          AppColors.headerYellow,
+                          AppColors.primaryOrange,
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryOrange.withValues(alpha: 0.35),
+                          color: AppColors.primaryOrange.withValues(
+                            alpha: 0.35,
+                          ),
                           blurRadius: 18,
                           offset: const Offset(0, 6),
                         ),
@@ -191,14 +203,16 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                       width: 32,
                       height: 32,
                       fit: BoxFit.contain,
-                      colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                      colorFilter: const ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 18),
 
-              // Title
               Text(
                 'Order History & Live Tracking',
                 textAlign: TextAlign.center,
@@ -209,7 +223,6 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
               ),
               const SizedBox(height: 8),
 
-              // Description
               Text(
                 'We are crafting an exceptional live tracking experience. Soon you can follow your delivery rider in real time, view digital invoices, and reorder past meals with a single tap.',
                 textAlign: TextAlign.center,
@@ -219,10 +232,12 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                   color: AppColors.textSecondary,
                 ),
               ),
-              // Quick View Coming Soon Callout
               Container(
                 margin: const EdgeInsets.only(top: 14),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF9E6),
                   borderRadius: BorderRadius.circular(14),
@@ -252,13 +267,13 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
               ),
               const SizedBox(height: 20),
 
-              // Feature cards
               _buildFeatureCard(
                 icon: Icons.map_rounded,
                 iconColor: const Color(0xFFE85826),
                 iconBg: const Color(0xFFFFF0EB),
                 title: 'Live GPS Telemetry',
-                description: 'Follow your rider step-by-step from restaurant kitchen to your doorstep.',
+                description:
+                    'Follow your rider step-by-step from restaurant kitchen to your doorstep.',
               ),
               const SizedBox(height: 10),
               _buildFeatureCard(
@@ -266,7 +281,8 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                 iconColor: const Color(0xFFF5B842),
                 iconBg: const Color(0xFFFFF9E6),
                 title: 'Digital PDF Receipts',
-                description: 'Instant itemized breakdowns and tax receipts saved securely.',
+                description:
+                    'Instant itemized breakdowns and tax receipts saved securely.',
               ),
               const SizedBox(height: 10),
               _buildFeatureCard(
@@ -274,18 +290,20 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                 iconColor: const Color(0xFF4CAF50),
                 iconBg: const Color(0xFFE8F5E9),
                 title: '1-Tap Quick Reorder',
-                description: 'Re-order your favorite customized meals in seconds.',
+                description:
+                    'Re-order your favorite customized meals in seconds.',
               ),
               const SizedBox(height: 24),
 
-              // Action button - Notify me
               SizedBox(
                 width: double.infinity,
                 height: 52,
                 child: ElevatedButton(
                   onPressed: _onNotifyTapped,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isNotified ? const Color(0xFF2E7D32) : AppColors.primaryOrange,
+                    backgroundColor: _isNotified
+                        ? const Color(0xFF2E7D32)
+                        : AppColors.primaryOrange,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -295,14 +313,18 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        _isNotified ? Icons.check_circle_rounded : Icons.notifications_active_rounded,
+                        _isNotified
+                            ? Icons.check_circle_rounded
+                            : Icons.notifications_active_rounded,
                         color: Colors.white,
                         size: 20,
                       ),
                       const SizedBox(width: 8),
                       Flexible(
                         child: Text(
-                          _isNotified ? 'Waitlist Active • We Will Notify You' : 'Notify Me When Available',
+                          _isNotified
+                              ? 'Waitlist Active • We Will Notify You'
+                              : 'Notify Me When Available',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 15,
@@ -317,7 +339,6 @@ class _OrderHistorySheetState extends State<OrderHistorySheet> {
               ),
               const SizedBox(height: 10),
 
-              // Secondary Dismiss Button
               SizedBox(
                 width: double.infinity,
                 height: 44,

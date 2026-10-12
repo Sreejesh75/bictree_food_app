@@ -19,14 +19,10 @@ class SocialAuthSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Stylish Divider with Or Sign Up With
         Row(
           children: [
             const Expanded(
-              child: Divider(
-                color: Color(0xFFEADBCE),
-                thickness: 1,
-              ),
+              child: Divider(color: Color(0xFFEADBCE), thickness: 1),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -41,34 +37,26 @@ class SocialAuthSection extends StatelessWidget {
               ),
             ),
             const Expanded(
-              child: Divider(
-                color: Color(0xFFEADBCE),
-                thickness: 1,
-              ),
+              child: Divider(color: Color(0xFFEADBCE), thickness: 1),
             ),
           ],
         ),
         const SizedBox(height: 18.0),
 
-        // Social Action Icons
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Google
             _SocialCircleButton(
               onTap: onGoogleTap,
               tooltip: 'Sign in with Google',
               child: const SizedBox(
                 width: 22,
                 height: 22,
-                child: CustomPaint(
-                  painter: _GoogleLogoPainter(),
-                ),
+                child: CustomPaint(painter: _GoogleLogoPainter()),
               ),
             ),
             const SizedBox(width: 20.0),
 
-            // Facebook
             _SocialCircleButton(
               onTap: onFacebookTap,
               tooltip: 'Sign in with Facebook',
@@ -94,7 +82,6 @@ class SocialAuthSection extends StatelessWidget {
             ),
             const SizedBox(width: 20.0),
 
-            // Biometric
             _SocialCircleButton(
               onTap: onBiometricTap,
               tooltip: 'Biometric / Fingerprint Login',
@@ -104,10 +91,7 @@ class SocialAuthSection extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF4EC),
                   shape: BoxShape.circle,
-                  border: Border.all(
-                    color: const Color(0xFFFFD9C3),
-                    width: 1,
-                  ),
+                  border: Border.all(color: const Color(0xFFFFD9C3), width: 1),
                 ),
                 alignment: Alignment.center,
                 child: const Icon(
@@ -129,11 +113,7 @@ class _SocialCircleButton extends StatelessWidget {
   final VoidCallback? onTap;
   final String? tooltip;
 
-  const _SocialCircleButton({
-    required this.child,
-    this.onTap,
-    this.tooltip,
-  });
+  const _SocialCircleButton({required this.child, this.onTap, this.tooltip});
 
   @override
   Widget build(BuildContext context) {
@@ -151,10 +131,7 @@ class _SocialCircleButton extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
-              border: Border.all(
-                color: const Color(0xFFEADBCE),
-                width: 1.2,
-              ),
+              border: Border.all(color: const Color(0xFFEADBCE), width: 1.2),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.04),
@@ -187,53 +164,53 @@ class _GoogleLogoPainter extends CustomPainter {
       ..strokeWidth = w * 0.22
       ..strokeCap = StrokeCap.butt;
 
-    // Blue arc (top-right & right)
     paint.color = const Color(0xFF4285F4);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius - paint.strokeWidth / 2),
-      -0.785, // -45 deg
-      1.57, // 90 deg
+      -0.785,
+      1.57,
       false,
       paint,
     );
 
-    // Green arc (bottom)
     paint.color = const Color(0xFF34A853);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius - paint.strokeWidth / 2),
-      0.785, // 45 deg
-      1.57, // 90 deg
+      0.785,
+      1.57,
       false,
       paint,
     );
 
-    // Yellow arc (bottom-left)
     paint.color = const Color(0xFFFBBC05);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius - paint.strokeWidth / 2),
-      2.355, // 135 deg
-      1.57, // 90 deg
+      2.355,
+      1.57,
       false,
       paint,
     );
 
-    // Red arc (top-left & top)
     paint.color = const Color(0xFFEA4335);
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius - paint.strokeWidth / 2),
-      3.925, // 225 deg
-      1.57, // 90 deg
+      3.925,
+      1.57,
       false,
       paint,
     );
 
-    // Blue horizontal bar
     final barPaint = Paint()
       ..color = const Color(0xFF4285F4)
       ..style = PaintingStyle.fill;
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(center.dx - 2, center.dy - (w * 0.11), radius + 2, w * 0.22),
+        Rect.fromLTWH(
+          center.dx - 2,
+          center.dy - (w * 0.11),
+          radius + 2,
+          w * 0.22,
+        ),
         const Radius.circular(2),
       ),
       barPaint,

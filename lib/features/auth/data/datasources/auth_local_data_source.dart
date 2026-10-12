@@ -16,7 +16,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   final SecureStorageService storageService;
 
   AuthLocalDataSourceImpl({SecureStorageService? storageService})
-      : storageService = storageService ?? SecureStorageService();
+    : storageService = storageService ?? SecureStorageService();
 
   @override
   Future<String?> getAccessToken() => storageService.getAccessToken();
@@ -30,7 +30,8 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   }
 
   @override
-  Future<void> saveUserData(String userJson) => storageService.saveUserData(userJson);
+  Future<void> saveUserData(String userJson) =>
+      storageService.saveUserData(userJson);
 
   @override
   Future<AuthUser?> getCachedUserData() async {

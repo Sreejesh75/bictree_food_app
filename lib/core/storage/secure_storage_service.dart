@@ -7,7 +7,7 @@ class SecureStorageService {
   SharedPreferences? _prefs;
 
   SecureStorageService({FlutterSecureStorage? storage})
-      : _storage = storage ?? const FlutterSecureStorage();
+    : _storage = storage ?? const FlutterSecureStorage();
 
   static const String _keyToken = 'auth_access_token';
   static const String _keyRefreshToken = 'auth_refresh_token';
@@ -17,8 +17,6 @@ class SecureStorageService {
   Future<SharedPreferences> _getPrefs() async {
     return _prefs ??= await SharedPreferences.getInstance();
   }
-
-  // --- Session Tokens ---
 
   Future<void> saveTokens({
     required String accessToken,
@@ -62,8 +60,6 @@ class SecureStorageService {
     }
   }
 
-  // --- Current User Session ---
-
   Future<void> saveUserData(String userJson) async {
     try {
       await _storage.write(key: _keyUserData, value: userJson);
@@ -85,8 +81,6 @@ class SecureStorageService {
     }
   }
 
-  // --- Registered Users Persistence (survives logout) ---
-
   Future<List<Map<String, dynamic>>> getRegisteredUsers() async {
     String? jsonStr;
     try {
@@ -107,9 +101,13 @@ class SecureStorageService {
 
   Future<void> saveRegisteredUser(Map<String, dynamic> userRecord) async {
     final list = await getRegisteredUsers();
-    // Remove if already existing with same email
-    final cleanEmail = (userRecord['email'] as String? ?? '').toLowerCase().trim();
-    list.removeWhere((item) => (item['email'] as String? ?? '').toLowerCase().trim() == cleanEmail);
+    final cleanEmail = (userRecord['email'] as String? ?? '')
+        .toLowerCase()
+        .trim();
+    list.removeWhere(
+      (item) =>
+          (item['email'] as String? ?? '').toLowerCase().trim() == cleanEmail,
+    );
     list.add(userRecord);
 
     final encoded = jsonEncode(list);
@@ -119,8 +117,6 @@ class SecureStorageService {
     final prefs = await _getPrefs();
     await prefs.setString(_keyRegisteredUsers, encoded);
   }
-
-  // --- Logout / Clear Session ---
 
   Future<void> clearSession() async {
     try {

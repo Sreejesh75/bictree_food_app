@@ -24,7 +24,9 @@ class FavoritesScreen extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Clear Favorites?'),
-        content: const Text('Are you sure you want to remove all saved recipes?'),
+        content: const Text(
+          'Are you sure you want to remove all saved recipes?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -43,7 +45,9 @@ class FavoritesScreen extends StatelessWidget {
   }
 
   void _removeFavoriteWithUndo(BuildContext context, RecipeModel recipe) {
-    context.read<HomeBloc>().add(ToggleFavoriteEvent(recipe.id, recipe: recipe));
+    context.read<HomeBloc>().add(
+      ToggleFavoriteEvent(recipe.id, recipe: recipe),
+    );
 
     UIHelpers.showTimedSnackBar(
       context,
@@ -52,7 +56,9 @@ class FavoritesScreen extends StatelessWidget {
       progressColor: const Color(0xFFE53935),
       duration: const Duration(seconds: 3),
       onAction: () {
-        context.read<HomeBloc>().add(ToggleFavoriteEvent(recipe.id, recipe: recipe));
+        context.read<HomeBloc>().add(
+          ToggleFavoriteEvent(recipe.id, recipe: recipe),
+        );
       },
     );
   }
@@ -62,8 +68,13 @@ class FavoritesScreen extends StatelessWidget {
 
     UIHelpers.showTimedSnackBar(
       context,
-      message: 'Added 1 × ${recipe.name} (\$${recipe.price.toStringAsFixed(1)})',
-      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+      message:
+          'Added 1 × ${recipe.name} (\$${recipe.price.toStringAsFixed(1)})',
+      icon: const Icon(
+        Icons.check_circle_rounded,
+        color: Color(0xFF4CAF50),
+        size: 20,
+      ),
       actionLabel: 'View Cart',
       progressColor: AppColors.primaryOrange,
       duration: const Duration(seconds: 3),
@@ -149,10 +160,12 @@ class FavoritesScreen extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.all(18.0),
             children: [
-              // Header counter banner
               Container(
                 margin: const EdgeInsets.only(bottom: 16.0),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 10,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
@@ -160,7 +173,11 @@ class FavoritesScreen extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.favorite_rounded, color: Color(0xFFE53935), size: 18),
+                    const Icon(
+                      Icons.favorite_rounded,
+                      color: Color(0xFFE53935),
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       '${state.favorites.length} Saved ${state.favorites.length == 1 ? 'Dish' : 'Dishes'}',
@@ -173,16 +190,12 @@ class FavoritesScreen extends StatelessWidget {
                     const Spacer(),
                     Text(
                       'Tap to view details',
-                      style: TextStyle(
-                        fontSize: 11.5,
-                        color: Colors.grey[500],
-                      ),
+                      style: TextStyle(fontSize: 11.5, color: Colors.grey[500]),
                     ),
                   ],
                 ),
               ),
 
-              // Favorites List
               ...state.favorites.map((recipe) {
                 return FavoriteItemCard(
                   recipe: recipe,
@@ -211,7 +224,8 @@ class FavoritesScreen extends StatelessWidget {
                       );
                     }
                   },
-                  onToggleFavorite: () => _removeFavoriteWithUndo(context, recipe),
+                  onToggleFavorite: () =>
+                      _removeFavoriteWithUndo(context, recipe),
                   onAddToCart: () => _addToCart(context, recipe),
                 );
               }),

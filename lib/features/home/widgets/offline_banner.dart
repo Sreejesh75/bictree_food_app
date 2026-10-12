@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../core/constants/app_colors.dart';
 
-/// Visible banner rendered whenever offline mode is active and cached dishes are displayed.
 class OfflineBanner extends StatelessWidget {
   final VoidCallback onRetry;
   final int cachedItemsCount;
@@ -20,12 +19,9 @@ class OfflineBanner extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(16.0, 10.0, 16.0, 6.0),
       padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 10.0),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7ED), // warm amber/orange tint
+        color: const Color(0xFFFFF7ED),
         borderRadius: BorderRadius.circular(14.0),
-        border: Border.all(
-          color: const Color(0xFFFFD8A8),
-          width: 1.2,
-        ),
+        border: Border.all(color: const Color(0xFFFFD8A8), width: 1.2),
         boxShadow: [
           BoxShadow(
             color: const Color(0xFFC2410C).withValues(alpha: 0.08),
@@ -36,7 +32,6 @@ class OfflineBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Offline Badge Indicator
           Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
@@ -52,7 +47,6 @@ class OfflineBanner extends StatelessWidget {
           ),
           const SizedBox(width: 12.0),
 
-          // Message & Description
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,7 +64,10 @@ class OfflineBanner extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: const Color(0xFFEA580C),
                         borderRadius: BorderRadius.circular(6),
@@ -104,14 +101,16 @@ class OfflineBanner extends StatelessWidget {
           ),
           const SizedBox(width: 10.0),
 
-          // Reconnect Action Button
           Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: onRetry,
               borderRadius: BorderRadius.circular(10),
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primaryOrange,
                   borderRadius: BorderRadius.circular(10),

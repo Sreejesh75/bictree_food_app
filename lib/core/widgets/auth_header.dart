@@ -23,16 +23,12 @@ class AuthHeader extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            AppColors.headerGradientStart,
-            AppColors.headerGradientEnd,
-          ],
+          colors: [AppColors.headerGradientStart, AppColors.headerGradientEnd],
         ),
       ),
       child: Stack(
         clipBehavior: Clip.none,
         children: [
-          // Ambient soft background circles for premium visual depth
           Positioned(
             top: -24,
             right: -20,
@@ -58,7 +54,6 @@ class AuthHeader extends StatelessWidget {
             ),
           ),
 
-          // Main Header Content
           Padding(
             padding: EdgeInsets.only(
               top: MediaQuery.of(context).padding.top + 6.0,

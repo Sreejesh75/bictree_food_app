@@ -3,7 +3,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../features/home/models/recipe_model.dart';
 import '../errors/failures.dart';
 
-/// Service responsible for offline caching of the first page of recipes using Hive.
 class HiveRecipeCacheService {
   static const String boxName = 'bictree_recipe_cache_box';
   static const String keyFirstPage = 'first_page_recipes';
@@ -18,7 +17,6 @@ class HiveRecipeCacheService {
     }
   }
 
-  /// Initialize Hive box for recipe caching.
   Future<Box> _getBox() async {
     if (_customBox != null && _customBox.isOpen) {
       return _customBox;
@@ -35,7 +33,6 @@ class HiveRecipeCacheService {
       }
       return await Hive.openBox(boxName);
     } catch (_) {
-      // If native Hive.initFlutter fails in test environment, use openBox directly
       if (Hive.isBoxOpen(boxName)) {
         return Hive.box(boxName);
       }
@@ -43,7 +40,6 @@ class HiveRecipeCacheService {
     }
   }
 
-  /// Cache the first page of recipes into Hive.
   Future<void> cacheFirstPageRecipes(List<RecipeModel> recipes) async {
     if (recipes.isEmpty) return;
     try {
@@ -61,7 +57,6 @@ class HiveRecipeCacheService {
     }
   }
 
-  /// Read the cached first page of recipes from Hive.
   Future<List<RecipeModel>> getCachedFirstPageRecipes() async {
     try {
       final box = await _getBox();
@@ -80,7 +75,6 @@ class HiveRecipeCacheService {
     }
   }
 
-  /// Check if an offline cache exists.
   Future<bool> hasCachedRecipes() async {
     try {
       final box = await _getBox();
@@ -91,7 +85,6 @@ class HiveRecipeCacheService {
     }
   }
 
-  /// Return when the cache was saved.
   Future<DateTime?> getCacheTimestamp() async {
     try {
       final box = await _getBox();
@@ -103,7 +96,6 @@ class HiveRecipeCacheService {
     return null;
   }
 
-  /// Clear the cached recipes.
   Future<void> clearCache() async {
     try {
       final box = await _getBox();

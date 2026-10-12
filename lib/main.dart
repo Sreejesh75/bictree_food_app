@@ -34,9 +34,7 @@ void main() async {
     await Hive.initFlutter();
   } catch (_) {}
 
-  runApp(
-    BictreeFoodApp(authRepository: authRepository),
-  );
+  runApp(BictreeFoodApp(authRepository: authRepository));
 }
 
 class BictreeFoodApp extends StatefulWidget {
@@ -62,9 +60,8 @@ class _BictreeFoodAppState extends State<BictreeFoodApp> {
   @override
   void initState() {
     super.initState();
-    _authBloc = AuthBloc(
-      repository: widget.authRepository,
-    )..add(const CheckAuthStatusEvent());
+    _authBloc = AuthBloc(repository: widget.authRepository)
+      ..add(const CheckAuthStatusEvent());
 
     _cartBloc = CartBloc()..add(const LoadCartEvent());
 
@@ -104,4 +101,3 @@ class _BictreeFoodAppState extends State<BictreeFoodApp> {
     );
   }
 }
-

@@ -108,10 +108,16 @@ void main() {
       build: () => homeBloc,
       act: (bloc) => bloc.add(const SelectCategoryEvent('Snacks')),
       expect: () => [
-        predicate<HomeState>((state) =>
-            state.status == HomeStatus.loading && state.selectedCategory == 'Snacks'),
-        predicate<HomeState>((state) =>
-            state.status == HomeStatus.success && state.selectedCategory == 'Snacks'),
+        predicate<HomeState>(
+          (state) =>
+              state.status == HomeStatus.loading &&
+              state.selectedCategory == 'Snacks',
+        ),
+        predicate<HomeState>(
+          (state) =>
+              state.status == HomeStatus.success &&
+              state.selectedCategory == 'Snacks',
+        ),
       ],
     );
 
@@ -120,23 +126,27 @@ void main() {
       build: () => homeBloc,
       act: (bloc) => bloc.add(const SearchRecipesEvent('Pizza')),
       expect: () => [
-        predicate<HomeState>((state) =>
-            state.status == HomeStatus.loading && state.searchQuery == 'Pizza'),
-        predicate<HomeState>((state) =>
-            state.status == HomeStatus.success &&
-            state.recipes.length == 1 &&
-            state.recipes.first.name.contains('Pizza')),
+        predicate<HomeState>(
+          (state) =>
+              state.status == HomeStatus.loading &&
+              state.searchQuery == 'Pizza',
+        ),
+        predicate<HomeState>(
+          (state) =>
+              state.status == HomeStatus.success &&
+              state.recipes.length == 1 &&
+              state.recipes.first.name.contains('Pizza'),
+        ),
       ],
     );
 
     blocTest<HomeBloc, HomeState>(
       'sorts recipes by price on SortRecipesEvent',
       build: () => homeBloc,
-      seed: () => HomeState(
-        status: HomeStatus.success,
-        recipes: fakeRepo.mockRecipes,
-      ),
-      act: (bloc) => bloc.add(const SortRecipesEvent(SortOption.priceLowToHigh)),
+      seed: () =>
+          HomeState(status: HomeStatus.success, recipes: fakeRepo.mockRecipes),
+      act: (bloc) =>
+          bloc.add(const SortRecipesEvent(SortOption.priceLowToHigh)),
       expect: () => [
         predicate<HomeState>((state) {
           return state.selectedSort == SortOption.priceLowToHigh &&

@@ -5,10 +5,7 @@ import '../bloc/cart_state.dart';
 class CartDeliveryBanner extends StatelessWidget {
   final CartState state;
 
-  const CartDeliveryBanner({
-    super.key,
-    required this.state,
-  });
+  const CartDeliveryBanner({super.key, required this.state});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +19,11 @@ class CartDeliveryBanner extends StatelessWidget {
         ),
         child: const Row(
           children: [
-            Icon(Icons.check_circle_rounded, color: Color(0xFF2E7D32), size: 20),
+            Icon(
+              Icons.check_circle_rounded,
+              color: Color(0xFF2E7D32),
+              size: 20,
+            ),
             SizedBox(width: 8),
             Expanded(
               child: Text(
@@ -52,7 +53,11 @@ class CartDeliveryBanner extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.local_shipping_outlined, color: AppColors.primaryOrange, size: 20),
+              const Icon(
+                Icons.local_shipping_outlined,
+                color: AppColors.primaryOrange,
+                size: 20,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -73,7 +78,9 @@ class CartDeliveryBanner extends StatelessWidget {
               value: progress,
               minHeight: 6,
               backgroundColor: const Color(0xFFFFECB3),
-              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryOrange),
+              valueColor: const AlwaysStoppedAnimation<Color>(
+                AppColors.primaryOrange,
+              ),
             ),
           ),
         ],

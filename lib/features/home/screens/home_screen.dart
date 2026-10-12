@@ -39,10 +39,7 @@ import 'recipe_detail_screen.dart';
 class HomeScreen extends StatelessWidget {
   final AuthUser user;
 
-  const HomeScreen({
-    super.key,
-    required this.user,
-  });
+  const HomeScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +48,9 @@ class HomeScreen extends StatelessWidget {
       return _HomeView(user: user);
     } catch (_) {
       return BlocProvider<HomeBloc>(
-        create: (context) => HomeBloc(
-          repository: RecipeRepository(),
-        )..add(const FetchInitialRecipesEvent()),
+        create: (context) =>
+            HomeBloc(repository: RecipeRepository())
+              ..add(const FetchInitialRecipesEvent()),
         child: _HomeView(user: user),
       );
     }
@@ -117,10 +114,7 @@ class _HomeViewState extends State<_HomeView> {
         MaterialPageRoute(
           builder: (_) => BlocProvider.value(
             value: homeBloc,
-            child: RecipeDetailScreen(
-              recipe: recipe,
-              heroTag: heroTag,
-            ),
+            child: RecipeDetailScreen(recipe: recipe, heroTag: heroTag),
           ),
         ),
       );
@@ -135,9 +129,7 @@ class _HomeViewState extends State<_HomeView> {
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (_) => const CartScreen(),
-        ),
+        MaterialPageRoute(builder: (_) => const CartScreen()),
       ).then((_) {
         if (mounted) setState(() => _bottomNavIndex = 0);
       });
@@ -164,7 +156,6 @@ class _HomeViewState extends State<_HomeView> {
       });
     }
   }
-
 
   void _showSortSheet(BuildContext context) {
     final currentSort = context.read<HomeBloc>().state.selectedSort;
@@ -253,7 +244,6 @@ class _HomeViewState extends State<_HomeView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Top Header Section (scrolls smoothly with page content)
                 BlocBuilder<CartBloc, CartState>(
                   builder: (context, cartState) {
                     return HomeHeader(
@@ -273,7 +263,6 @@ class _HomeViewState extends State<_HomeView> {
                   },
                 ),
 
-                // Main Content Card with rounded top corners
                 Container(
                   width: double.infinity,
                   constraints: BoxConstraints(
@@ -287,37 +276,52 @@ class _HomeViewState extends State<_HomeView> {
                   ),
                   child: BlocBuilder<HomeBloc, HomeState>(
                     builder: (context, state) {
-                      if (state.status == HomeStatus.loading && state.recipes.isEmpty) {
+                      if (state.status == HomeStatus.loading &&
+                          state.recipes.isEmpty) {
                         return const Padding(
                           padding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
                           child: RecipeShimmer(),
                         );
                       }
 
-                      if (state.status == HomeStatus.error && state.recipes.isEmpty) {
+                      if (state.status == HomeStatus.error &&
+                          state.recipes.isEmpty) {
                         return Padding(
-                          padding: const EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 40.0),
+                          padding: const EdgeInsets.fromLTRB(
+                            18.0,
+                            20.0,
+                            18.0,
+                            40.0,
+                          ),
                           child: FriendlyErrorView(
                             failure: state.failure,
                             errorMessage: state.errorMessage,
                             onRetry: () {
-                              context.read<HomeBloc>().add(const FetchInitialRecipesEvent());
+                              context.read<HomeBloc>().add(
+                                const FetchInitialRecipesEvent(),
+                              );
                             },
                           ),
                         );
                       }
 
                       return Padding(
-                        padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 20.0),
+                        padding: const EdgeInsets.fromLTRB(
+                          18.0,
+                          18.0,
+                          18.0,
+                          20.0,
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // Visible Offline Banner when offline & showing cached items
                             if (state.isOffline) ...[
                               OfflineBanner(
                                 cachedItemsCount: state.recipes.length,
                                 onRetry: () {
-                                  context.read<HomeBloc>().add(const RefreshRecipesEvent());
+                                  context.read<HomeBloc>().add(
+                                    const RefreshRecipesEvent(),
+                                  );
                                 },
                               ),
                               const SizedBox(height: 8.0),
@@ -326,31 +330,38 @@ class _HomeViewState extends State<_HomeView> {
                             CategoryChips(
                               selectedCategory: state.selectedCategory,
                               onCategorySelected: (cat) {
-                                context.read<HomeBloc>().add(SelectCategoryEvent(cat));
+                                context.read<HomeBloc>().add(
+                                  SelectCategoryEvent(cat),
+                                );
                               },
                             ),
                             const SizedBox(height: 22.0),
 
-                            if (state.bestSellers.isNotEmpty && state.searchQuery.isEmpty) ...[
+                            if (state.bestSellers.isNotEmpty &&
+                                state.searchQuery.isEmpty) ...[
                               BestSellerSection(
                                 items: state.bestSellers,
-                                onItemTap: (recipe, heroTag) => _openRecipeDetail(recipe, heroTag),
+                                onItemTap: (recipe, heroTag) =>
+                                    _openRecipeDetail(recipe, heroTag),
                                 onViewAllTap: () {
                                   UIHelpers.showSnackBar(
                                     context,
-                                    message: 'All Best Sellers shown below in catalog',
+                                    message:
+                                        'All Best Sellers shown below in catalog',
                                   );
                                 },
                               ),
                               const SizedBox(height: 22.0),
                             ],
 
-                            if (state.searchQuery.isEmpty && state.selectedCategory == 'All') ...[
+                            if (state.searchQuery.isEmpty &&
+                                state.selectedCategory == 'All') ...[
                               BannerCarousel(
                                 onBannerTap: () {
                                   UIHelpers.showSnackBar(
                                     context,
-                                    message: 'Special 30% discount applied! Use coupon BICTREE30 in Cart',
+                                    message:
+                                        'Special 30% discount applied! Use coupon BICTREE30 in Cart',
                                   );
                                 },
                               ),
@@ -364,8 +375,8 @@ class _HomeViewState extends State<_HomeView> {
                                   state.searchQuery.isNotEmpty
                                       ? 'Search Results (${state.recipes.length})'
                                       : state.selectedCategory != 'All'
-                                          ? '${state.selectedCategory} Dishes'
-                                          : 'Recommend',
+                                      ? '${state.selectedCategory} Dishes'
+                                      : 'Recommend',
                                   style: AppTextStyles.screenHeading.copyWith(
                                     fontSize: 19.0,
                                     fontWeight: FontWeight.w800,
@@ -402,11 +413,17 @@ class _HomeViewState extends State<_HomeView> {
                                 searchQuery: state.searchQuery,
                                 category: state.selectedCategory,
                                 onClearSearch: () {
-                                  context.read<HomeBloc>().add(const SearchRecipesEvent(''));
-                                  context.read<HomeBloc>().add(const SelectCategoryEvent('All'));
+                                  context.read<HomeBloc>().add(
+                                    const SearchRecipesEvent(''),
+                                  );
+                                  context.read<HomeBloc>().add(
+                                    const SelectCategoryEvent('All'),
+                                  );
                                 },
                                 onSuggestionTap: (suggestion) {
-                                  context.read<HomeBloc>().add(SearchRecipesEvent(suggestion));
+                                  context.read<HomeBloc>().add(
+                                    SearchRecipesEvent(suggestion),
+                                  );
                                 },
                               )
                             else
@@ -414,12 +431,13 @@ class _HomeViewState extends State<_HomeView> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state.recipes.length,
-                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  crossAxisSpacing: 14.0,
-                                  mainAxisSpacing: 14.0,
-                                  childAspectRatio: 0.88,
-                                ),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 14.0,
+                                      mainAxisSpacing: 14.0,
+                                      childAspectRatio: 0.88,
+                                    ),
                                 itemBuilder: (context, index) {
                                   final recipe = state.recipes[index];
                                   final heroTag = 'recipe_grid_${recipe.id}';
@@ -427,9 +445,12 @@ class _HomeViewState extends State<_HomeView> {
                                   return RecipeCard(
                                     recipe: recipe,
                                     heroTag: heroTag,
-                                    onTap: () => _openRecipeDetail(recipe, heroTag),
+                                    onTap: () =>
+                                        _openRecipeDetail(recipe, heroTag),
                                     onFavoriteTap: () {
-                                      context.read<HomeBloc>().add(ToggleFavoriteEvent(recipe.id));
+                                      context.read<HomeBloc>().add(
+                                        ToggleFavoriteEvent(recipe.id),
+                                      );
                                     },
                                   );
                                 },

@@ -32,10 +32,8 @@ class _TimedSnackBarContentState extends State<TimedSnackBarContent>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    )..reverse(from: 1.0);
+    _controller = AnimationController(vsync: this, duration: widget.duration)
+      ..reverse(from: 1.0);
   }
 
   @override
@@ -59,7 +57,8 @@ class _TimedSnackBarContentState extends State<TimedSnackBarContent>
             Expanded(
               child: Text(
                 widget.message,
-                style: widget.textStyle ??
+                style:
+                    widget.textStyle ??
                     const TextStyle(
                       color: Colors.white,
                       fontSize: 13,
@@ -78,7 +77,10 @@ class _TimedSnackBarContentState extends State<TimedSnackBarContent>
                 },
                 behavior: HitTestBehavior.opaque,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 2,
+                  ),
                   child: Text(
                     widget.actionLabel!,
                     style: TextStyle(

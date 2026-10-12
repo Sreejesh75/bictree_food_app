@@ -37,7 +37,10 @@ class _CartScreenState extends State<CartScreen> {
     if (code.isEmpty) return;
     if (code == 'BICTREE30' || code == 'FOOD30') {
       setState(() => _couponApplied = true);
-      UIHelpers.showSnackBar(context, message: '🎉 30% discount applied successfully!');
+      UIHelpers.showSnackBar(
+        context,
+        message: '🎉 30% discount applied successfully!',
+      );
     } else {
       UIHelpers.showSnackBar(
         context,
@@ -65,11 +68,8 @@ class _CartScreenState extends State<CartScreen> {
       duration: const Duration(seconds: 3),
       onAction: () {
         context.read<CartBloc>().add(
-              RestoreCartItemEvent(
-                item: cartItem,
-                index: index,
-              ),
-            );
+          RestoreCartItemEvent(item: cartItem, index: index),
+        );
       },
     );
   }
@@ -120,7 +120,8 @@ class _CartScreenState extends State<CartScreen> {
                 onPressed: () {
                   CartDialogs.showClearConfirm(
                     context,
-                    onClear: () => context.read<CartBloc>().add(const ClearCartEvent()),
+                    onClear: () =>
+                        context.read<CartBloc>().add(const ClearCartEvent()),
                   );
                 },
                 child: const Text(
@@ -143,7 +144,10 @@ class _CartScreenState extends State<CartScreen> {
           }
 
           final discount = _couponApplied ? state.subtotal * 0.30 : 0.0;
-          final finalTotal = (state.total - discount).clamp(0.0, double.infinity);
+          final finalTotal = (state.total - discount).clamp(
+            0.0,
+            double.infinity,
+          );
 
           return Column(
             children: [
@@ -162,25 +166,26 @@ class _CartScreenState extends State<CartScreen> {
                         cartItem: cartItem,
                         onIncrement: () {
                           context.read<CartBloc>().add(
-                                UpdateCartQuantityEvent(
-                                  recipeId: cartItem.recipe.id,
-                                  quantity: cartItem.quantity + 1,
-                                ),
-                              );
+                            UpdateCartQuantityEvent(
+                              recipeId: cartItem.recipe.id,
+                              quantity: cartItem.quantity + 1,
+                            ),
+                          );
                         },
                         onDecrement: () {
                           if (cartItem.quantity > 1) {
                             context.read<CartBloc>().add(
-                                  UpdateCartQuantityEvent(
-                                    recipeId: cartItem.recipe.id,
-                                    quantity: cartItem.quantity - 1,
-                                  ),
-                                );
+                              UpdateCartQuantityEvent(
+                                recipeId: cartItem.recipe.id,
+                                quantity: cartItem.quantity - 1,
+                              ),
+                            );
                           } else {
                             _removeItemWithUndo(context, cartItem, index);
                           }
                         },
-                        onDismissed: () => _removeItemWithUndo(context, cartItem, index),
+                        onDismissed: () =>
+                            _removeItemWithUndo(context, cartItem, index),
                       );
                     }),
                     const SizedBox(height: 12),

@@ -69,7 +69,9 @@ class RecipeDetailBottomBar extends StatelessWidget {
                     child: Icon(
                       Icons.remove_rounded,
                       size: 18,
-                      color: quantity > 1 ? AppColors.textDark : Colors.grey[400],
+                      color: quantity > 1
+                          ? AppColors.textDark
+                          : Colors.grey[400],
                     ),
                   ),
                 ),

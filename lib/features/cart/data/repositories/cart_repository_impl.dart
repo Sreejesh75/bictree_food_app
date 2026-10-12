@@ -2,12 +2,11 @@ import '../../domain/entities/cart_item.dart';
 import '../../domain/repositories/i_cart_repository.dart';
 import '../datasources/cart_local_data_source.dart';
 
-/// Concrete Data Layer implementation of [ICartRepository].
 class CartRepositoryImpl implements ICartRepository {
   final CartLocalDataSource localDataSource;
 
   CartRepositoryImpl({CartLocalDataSource? localDataSource})
-      : localDataSource = localDataSource ?? CartLocalDataSourceImpl();
+    : localDataSource = localDataSource ?? CartLocalDataSourceImpl();
 
   @override
   Future<List<CartItem>> loadCart({required String userId}) =>
@@ -17,8 +16,7 @@ class CartRepositoryImpl implements ICartRepository {
   Future<void> saveCart({
     required String userId,
     required List<CartItem> items,
-  }) =>
-      localDataSource.saveCart(userId, items);
+  }) => localDataSource.saveCart(userId, items);
 
   @override
   Future<void> clearCart({required String userId}) =>

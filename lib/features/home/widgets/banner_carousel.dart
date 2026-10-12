@@ -81,7 +81,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Full Image Banner Carousel
         SizedBox(
           height: 145.0,
           child: PageView.builder(
@@ -114,21 +113,20 @@ class _BannerCarouselState extends State<BannerCarousel> {
                     child: Stack(
                       fit: StackFit.expand,
                       children: [
-                        // 1. Whole image filling the entire banner card
                         Image.asset(
                           banner.assetImage,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
-                            color: const Color(0xFFF5B842),
-                            child: const Icon(
-                              Icons.restaurant_rounded,
-                              size: 44,
-                              color: Colors.white,
-                            ),
-                          ),
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
+                                color: const Color(0xFFF5B842),
+                                child: const Icon(
+                                  Icons.restaurant_rounded,
+                                  size: 44,
+                                  color: Colors.white,
+                                ),
+                              ),
                         ),
 
-                        // 2. Soft elegant vignette gradient for high contrast readability
                         Container(
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
@@ -144,7 +142,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
                           ),
                         ),
 
-                        // 3. Text written directly on the image
                         Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 20.0,
@@ -154,7 +151,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // Promo pill tag
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8.0,
@@ -176,7 +172,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
                               ),
                               const SizedBox(height: 6.0),
 
-                              // Main headline
                               Text(
                                 banner.title,
                                 style: const TextStyle(
@@ -195,7 +190,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
                               ),
                               const SizedBox(height: 4.0),
 
-                              // Big discount text
                               Text(
                                 banner.discount,
                                 style: const TextStyle(
@@ -225,7 +219,6 @@ class _BannerCarouselState extends State<BannerCarousel> {
         ),
         const SizedBox(height: 10.0),
 
-        // Indicator dots below
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(_banners.length, (index) {
@@ -236,7 +229,9 @@ class _BannerCarouselState extends State<BannerCarousel> {
               height: 5.5,
               width: isActive ? 18.0 : 6.0,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primaryOrange : const Color(0xFFF3DEC0),
+                color: isActive
+                    ? AppColors.primaryOrange
+                    : const Color(0xFFF3DEC0),
                 borderRadius: BorderRadius.circular(6.0),
               ),
             );

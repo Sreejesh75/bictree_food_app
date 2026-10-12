@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:dio/dio.dart';
 
-/// Typed failure base class ensuring no raw unhandled exceptions reach the UI.
 abstract class Failure extends Equatable implements Exception {
   final String message;
   final String code;
@@ -22,21 +21,21 @@ abstract class Failure extends Equatable implements Exception {
   List<Object?> get props => [message, code];
 }
 
-/// Emitted when device is offline, DNS lookup fails, or network is unreachable.
 class NetworkFailure extends Failure {
   const NetworkFailure({
-    super.message = 'No internet connection detected. Please check your Wi-Fi or cellular network.',
+    super.message =
+        'No internet connection detected. Please check your Wi-Fi or cellular network.',
     super.code = 'NETWORK_OFFLINE',
     super.originalError,
   });
 }
 
-/// Emitted when HTTP response returns 5xx, 4xx, or malformed JSON payloads.
 class ServerFailure extends Failure {
   final int? statusCode;
 
   const ServerFailure({
-    super.message = 'Food server is temporarily unavailable. Please try again shortly.',
+    super.message =
+        'Food server is temporarily unavailable. Please try again shortly.',
     super.code = 'SERVER_ERROR',
     this.statusCode,
     super.originalError,
@@ -46,7 +45,6 @@ class ServerFailure extends Failure {
   List<Object?> get props => [message, code, statusCode];
 }
 
-/// Emitted when local Hive/storage operations fail.
 class CacheFailure extends Failure {
   const CacheFailure({
     super.message = 'Failed to load local offline food menu.',
@@ -55,16 +53,15 @@ class CacheFailure extends Failure {
   });
 }
 
-/// Emitted when network request times out.
 class TimeoutFailure extends Failure {
   const TimeoutFailure({
-    super.message = 'Request timed out while connecting to the kitchen. Please try again.',
+    super.message =
+        'Request timed out while connecting to the kitchen. Please try again.',
     super.code = 'REQUEST_TIMEOUT',
     super.originalError,
   });
 }
 
-/// Fallback for unexpected anomalies.
 class UnknownFailure extends Failure {
   const UnknownFailure({
     super.message = 'Something unexpected happened. Please try again.',
@@ -73,7 +70,6 @@ class UnknownFailure extends Failure {
   });
 }
 
-/// Helper function to transform raw Dart/HTTP exceptions into typed [Failure] instances.
 Failure mapExceptionToFailure(dynamic error) {
   if (error is Failure) {
     return error;
@@ -84,12 +80,14 @@ Failure mapExceptionToFailure(dynamic error) {
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
         return TimeoutFailure(
-          message: 'Connection timed out. Please check your internet connection.',
+          message:
+              'Connection timed out. Please check your internet connection.',
           originalError: error,
         );
       case DioExceptionType.connectionError:
         return NetworkFailure(
-          message: 'Unable to connect to the server. Please check your internet connection.',
+          message:
+              'Unable to connect to the server. Please check your internet connection.',
           originalError: error,
         );
       case DioExceptionType.badResponse:

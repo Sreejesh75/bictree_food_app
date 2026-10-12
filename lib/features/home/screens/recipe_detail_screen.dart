@@ -54,24 +54,25 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
     setState(() => _isFavorite = !_isFavorite);
     try {
       context.read<HomeBloc>().add(
-            ToggleFavoriteEvent(widget.recipe.id, recipe: widget.recipe),
-          );
+        ToggleFavoriteEvent(widget.recipe.id, recipe: widget.recipe),
+      );
     } catch (_) {}
   }
 
   void _addToCart() {
     context.read<CartBloc>().add(
-          AddToCartEvent(
-            recipe: widget.recipe,
-            quantity: _quantity,
-          ),
-        );
+      AddToCartEvent(recipe: widget.recipe, quantity: _quantity),
+    );
 
     final totalPrice = (widget.recipe.price * _quantity).toStringAsFixed(1);
     UIHelpers.showTimedSnackBar(
       context,
       message: 'Added $_quantity × ${widget.recipe.name} (\$$totalPrice)',
-      icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+      icon: const Icon(
+        Icons.check_circle_rounded,
+        color: Color(0xFF4CAF50),
+        size: 20,
+      ),
       actionLabel: 'View Cart',
       duration: const Duration(seconds: 3),
       progressColor: AppColors.primaryOrange,
@@ -85,7 +86,6 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
           );
         }
       },
-
     );
   }
 
@@ -112,9 +112,13 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                   const SizedBox(height: 18),
                   RecipeDetailInfoCapsules(recipe: widget.recipe),
                   const SizedBox(height: 22),
-                  RecipeDetailIngredients(ingredients: widget.recipe.ingredients),
+                  RecipeDetailIngredients(
+                    ingredients: widget.recipe.ingredients,
+                  ),
                   const SizedBox(height: 24),
-                  RecipeDetailInstructions(instructions: widget.recipe.instructions),
+                  RecipeDetailInstructions(
+                    instructions: widget.recipe.instructions,
+                  ),
                 ],
               ),
             ),
@@ -185,7 +189,9 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
                 ],
               ),
               child: Icon(
-                _isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+                _isFavorite
+                    ? Icons.favorite_rounded
+                    : Icons.favorite_border_rounded,
                 color: const Color(0xFFE85826),
                 size: 20,
               ),

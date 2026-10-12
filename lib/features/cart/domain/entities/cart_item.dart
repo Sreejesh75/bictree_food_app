@@ -1,22 +1,15 @@
 import 'package:equatable/equatable.dart';
 import '../../../home/domain/entities/recipe_model.dart';
 
-/// Pure domain entity representing an item in the shopping cart.
 class CartItem extends Equatable {
   final RecipeModel recipe;
   final int quantity;
 
-  const CartItem({
-    required this.recipe,
-    required this.quantity,
-  });
+  const CartItem({required this.recipe, required this.quantity});
 
   double get totalPrice => recipe.price * quantity;
 
-  CartItem copyWith({
-    RecipeModel? recipe,
-    int? quantity,
-  }) {
+  CartItem copyWith({RecipeModel? recipe, int? quantity}) {
     return CartItem(
       recipe: recipe ?? this.recipe,
       quantity: quantity ?? this.quantity,
@@ -24,10 +17,7 @@ class CartItem extends Equatable {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'recipe': recipe.toJson(),
-      'quantity': quantity,
-    };
+    return {'recipe': recipe.toJson(), 'quantity': quantity};
   }
 
   factory CartItem.fromJson(Map<String, dynamic> json) {

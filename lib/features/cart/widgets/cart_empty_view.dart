@@ -5,10 +5,7 @@ import '../../../core/constants/app_text_styles.dart';
 class CartEmptyView extends StatelessWidget {
   final VoidCallback? onExploreMenu;
 
-  const CartEmptyView({
-    super.key,
-    this.onExploreMenu,
-  });
+  const CartEmptyView({super.key, this.onExploreMenu});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +16,6 @@ class CartEmptyView extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
 
-          // Layered Aura Illustration Card with Floating Food Badges
           Center(
             child: SizedBox(
               width: 240,
@@ -27,7 +23,6 @@ class CartEmptyView extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  // Outer subtle radial aura
                   Container(
                     width: 190,
                     height: 190,
@@ -42,7 +37,6 @@ class CartEmptyView extends StatelessWidget {
                     ),
                   ),
 
-                  // Middle warm halo
                   Container(
                     width: 136,
                     height: 136,
@@ -51,7 +45,9 @@ class CartEmptyView extends StatelessWidget {
                       color: const Color(0xFFFFF3D2).withValues(alpha: 0.75),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryOrange.withValues(alpha: 0.08),
+                          color: AppColors.primaryOrange.withValues(
+                            alpha: 0.08,
+                          ),
                           blurRadius: 24,
                           spreadRadius: 4,
                         ),
@@ -59,7 +55,6 @@ class CartEmptyView extends StatelessWidget {
                     ),
                   ),
 
-                  // Core warm glowing circle
                   Container(
                     width: 96,
                     height: 96,
@@ -68,14 +63,13 @@ class CartEmptyView extends StatelessWidget {
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFFFFFDF7),
-                          Color(0xFFFFE8B0),
-                        ],
+                        colors: [Color(0xFFFFFDF7), Color(0xFFFFE8B0)],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryOrange.withValues(alpha: 0.22),
+                          color: AppColors.primaryOrange.withValues(
+                            alpha: 0.22,
+                          ),
                           blurRadius: 18,
                           offset: const Offset(0, 8),
                         ),
@@ -88,21 +82,18 @@ class CartEmptyView extends StatelessWidget {
                     ),
                   ),
 
-                  // Floating accent badge top-left: 🍕 Pizza
                   Positioned(
                     top: 14,
                     left: 6,
                     child: _buildFloatingBadge('🍕', 'Tasty Bites'),
                   ),
 
-                  // Floating accent badge top-right: ⭐ 4.9
                   Positioned(
                     top: 20,
                     right: 4,
                     child: _buildFloatingBadge('⭐', '4.9 Rated'),
                   ),
 
-                  // Floating accent badge bottom-right: 🥗 Fresh
                   Positioned(
                     bottom: 16,
                     right: 14,
@@ -115,7 +106,6 @@ class CartEmptyView extends StatelessWidget {
 
           const SizedBox(height: 22),
 
-          // Friendly pill badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
             decoration: BoxDecoration(
@@ -142,7 +132,6 @@ class CartEmptyView extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Screen Heading
           Text(
             'Your cart is empty',
             style: AppTextStyles.screenHeading.copyWith(
@@ -154,7 +143,6 @@ class CartEmptyView extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // Subtitle description
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 320),
             child: Text(
@@ -170,7 +158,6 @@ class CartEmptyView extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // Premium "Explore Menu" CTA Button
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28),
@@ -188,7 +175,10 @@ class CartEmptyView extends StatelessWidget {
                 backgroundColor: AppColors.primaryOrange,
                 foregroundColor: Colors.white,
                 elevation: 0,
-                padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 15),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 36,
+                  vertical: 15,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28),
                 ),
@@ -213,10 +203,11 @@ class CartEmptyView extends StatelessWidget {
 
           const SizedBox(height: 36),
 
-          // Popular choices divider
           Row(
             children: [
-              const Expanded(child: Divider(color: Color(0xFFEBEBEB), thickness: 1)),
+              const Expanded(
+                child: Divider(color: Color(0xFFEBEBEB), thickness: 1),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Text(
@@ -229,13 +220,14 @@ class CartEmptyView extends StatelessWidget {
                   ),
                 ),
               ),
-              const Expanded(child: Divider(color: Color(0xFFEBEBEB), thickness: 1)),
+              const Expanded(
+                child: Divider(color: Color(0xFFEBEBEB), thickness: 1),
+              ),
             ],
           ),
 
           const SizedBox(height: 16),
 
-          // Category Shortcut Pills
           Wrap(
             spacing: 10,
             runSpacing: 10,
@@ -250,7 +242,6 @@ class CartEmptyView extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          // 3 Trust & Perk Badges
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
@@ -270,9 +261,17 @@ class CartEmptyView extends StatelessWidget {
               children: [
                 _buildPerkItem(Icons.bolt_rounded, '30 Mins', 'Fast Delivery'),
                 _buildPerkDivider(),
-                _buildPerkItem(Icons.verified_outlined, '100% Fresh', 'Chef Curated'),
+                _buildPerkItem(
+                  Icons.verified_outlined,
+                  '100% Fresh',
+                  'Chef Curated',
+                ),
                 _buildPerkDivider(),
-                _buildPerkItem(Icons.local_shipping_outlined, 'Free \$50+', 'Free Delivery'),
+                _buildPerkItem(
+                  Icons.local_shipping_outlined,
+                  'Free \$50+',
+                  'Free Delivery',
+                ),
               ],
             ),
           ),
@@ -371,20 +370,13 @@ class CartEmptyView extends StatelessWidget {
         const SizedBox(height: 2),
         Text(
           subtitle,
-          style: TextStyle(
-            fontSize: 10.5,
-            color: Colors.grey[600],
-          ),
+          style: TextStyle(fontSize: 10.5, color: Colors.grey[600]),
         ),
       ],
     );
   }
 
   Widget _buildPerkDivider() {
-    return Container(
-      width: 1,
-      height: 36,
-      color: const Color(0xFFEEEEEE),
-    );
+    return Container(width: 1, height: 36, color: const Color(0xFFEEEEEE));
   }
 }

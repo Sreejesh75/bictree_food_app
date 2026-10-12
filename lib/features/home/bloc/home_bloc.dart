@@ -46,7 +46,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         list.sort((a, b) => b.price.compareTo(a.price));
         break;
       case SortOption.caloriesLowToHigh:
-        list.sort((a, b) => a.caloriesPerServing.compareTo(b.caloriesPerServing));
+        list.sort(
+          (a, b) => a.caloriesPerServing.compareTo(b.caloriesPerServing),
+        );
         break;
     }
     return list;
@@ -82,17 +84,21 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.userId != null) {
       _activeUserId = event.userId;
     }
-    emit(state.copyWith(
-      status: HomeStatus.loading,
-      errorMessage: null,
-      failure: null,
-    ));
+    emit(
+      state.copyWith(
+        status: HomeStatus.loading,
+        errorMessage: null,
+        failure: null,
+      ),
+    );
     try {
       final savedFavorites = await _loadFavoritesFromStorage();
       final result = await repository.getRecipes(
         limit: 10,
         skip: 0,
-        category: state.selectedCategory == 'All' ? null : state.selectedCategory,
+        category: state.selectedCategory == 'All'
+            ? null
+            : state.selectedCategory,
       );
 
       final recipesWithFavs = result.recipes.map((r) {
@@ -106,27 +112,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final sorted = _applySort(recipesWithFavs, state.selectedSort);
 
-      emit(state.copyWith(
-        status: HomeStatus.success,
-        recipes: sorted,
-        bestSellers: bestSellers,
-        favorites: savedFavorites,
-        currentSkip: 0,
-        hasMore: result.hasMore,
-        isLoadingMore: false,
-        isOffline: result.isFromCache,
-        isFromCache: result.isFromCache,
-        failure: null,
-        errorMessage: null,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.success,
+          recipes: sorted,
+          bestSellers: bestSellers,
+          favorites: savedFavorites,
+          currentSkip: 0,
+          hasMore: result.hasMore,
+          isLoadingMore: false,
+          isOffline: result.isFromCache,
+          isFromCache: result.isFromCache,
+          failure: null,
+          errorMessage: null,
+        ),
+      );
     } catch (e) {
       final failure = mapExceptionToFailure(e);
-      emit(state.copyWith(
-        status: HomeStatus.error,
-        failure: failure,
-        errorMessage: failure.message,
-        isOffline: failure is NetworkFailure,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.error,
+          failure: failure,
+          errorMessage: failure.message,
+          isOffline: failure is NetworkFailure,
+        ),
+      );
     }
   }
 
@@ -139,7 +149,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final result = await repository.getRecipes(
         limit: 10,
         skip: 0,
-        category: state.selectedCategory == 'All' ? null : state.selectedCategory,
+        category: state.selectedCategory == 'All'
+            ? null
+            : state.selectedCategory,
       );
 
       final recipesWithFavs = result.recipes.map((r) {
@@ -153,26 +165,30 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final sorted = _applySort(recipesWithFavs, state.selectedSort);
 
-      emit(state.copyWith(
-        status: HomeStatus.success,
-        recipes: sorted,
-        bestSellers: bestSellers,
-        favorites: savedFavorites,
-        currentSkip: 0,
-        hasMore: result.hasMore,
-        isLoadingMore: false,
-        isOffline: result.isFromCache,
-        isFromCache: result.isFromCache,
-        failure: null,
-        errorMessage: null,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.success,
+          recipes: sorted,
+          bestSellers: bestSellers,
+          favorites: savedFavorites,
+          currentSkip: 0,
+          hasMore: result.hasMore,
+          isLoadingMore: false,
+          isOffline: result.isFromCache,
+          isFromCache: result.isFromCache,
+          failure: null,
+          errorMessage: null,
+        ),
+      );
     } catch (e) {
       final failure = mapExceptionToFailure(e);
-      emit(state.copyWith(
-        failure: failure,
-        errorMessage: failure.message,
-        isOffline: failure is NetworkFailure,
-      ));
+      emit(
+        state.copyWith(
+          failure: failure,
+          errorMessage: failure.message,
+          isOffline: failure is NetworkFailure,
+        ),
+      );
     }
   }
 
@@ -180,7 +196,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     FetchMoreRecipesEvent event,
     Emitter<HomeState> emit,
   ) async {
-    if (state.isLoadingMore || !state.hasMore || state.searchQuery.isNotEmpty) return;
+    if (state.isLoadingMore || !state.hasMore || state.searchQuery.isNotEmpty) {
+      return;
+    }
 
     emit(state.copyWith(isLoadingMore: true));
     try {
@@ -188,7 +206,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final result = await repository.getRecipes(
         limit: 10,
         skip: nextSkip,
-        category: state.selectedCategory == 'All' ? null : state.selectedCategory,
+        category: state.selectedCategory == 'All'
+            ? null
+            : state.selectedCategory,
       );
 
       final recipesWithFavs = result.recipes.map((r) {
@@ -196,15 +216,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         return r.copyWith(isFavorite: isFav);
       }).toList();
 
-      final combined = List<RecipeModel>.from(state.recipes)..addAll(recipesWithFavs);
+      final combined = List<RecipeModel>.from(state.recipes)
+        ..addAll(recipesWithFavs);
       final sorted = _applySort(combined, state.selectedSort);
 
-      emit(state.copyWith(
-        recipes: sorted,
-        currentSkip: nextSkip,
-        hasMore: result.hasMore,
-        isLoadingMore: false,
-      ));
+      emit(
+        state.copyWith(
+          recipes: sorted,
+          currentSkip: nextSkip,
+          hasMore: result.hasMore,
+          isLoadingMore: false,
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(isLoadingMore: false));
     }
@@ -214,14 +237,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     SelectCategoryEvent event,
     Emitter<HomeState> emit,
   ) async {
-    final String newCategory =
-        event.category == 'All' ? 'All' : (state.selectedCategory == event.category ? 'All' : event.category);
+    final String newCategory = event.category == 'All'
+        ? 'All'
+        : (state.selectedCategory == event.category ? 'All' : event.category);
 
-    emit(state.copyWith(
-      selectedCategory: newCategory,
-      status: HomeStatus.loading,
-      searchQuery: '',
-    ));
+    emit(
+      state.copyWith(
+        selectedCategory: newCategory,
+        status: HomeStatus.loading,
+        searchQuery: '',
+      ),
+    );
 
     try {
       final result = await repository.getRecipes(
@@ -241,21 +267,25 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final sorted = _applySort(recipesWithFavs, state.selectedSort);
 
-      emit(state.copyWith(
-        status: HomeStatus.success,
-        recipes: sorted,
-        bestSellers: bestSellers,
-        currentSkip: 0,
-        hasMore: result.hasMore,
-        isLoadingMore: false,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.success,
+          recipes: sorted,
+          bestSellers: bestSellers,
+          currentSkip: 0,
+          hasMore: result.hasMore,
+          isLoadingMore: false,
+        ),
+      );
     } catch (e) {
       final failure = mapExceptionToFailure(e);
-      emit(state.copyWith(
-        status: HomeStatus.error,
-        failure: failure,
-        errorMessage: failure.message,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.error,
+          failure: failure,
+          errorMessage: failure.message,
+        ),
+      );
     }
   }
 
@@ -274,34 +304,32 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
       final sorted = _applySort(recipesWithFavs, state.selectedSort);
 
-      emit(state.copyWith(
-        status: HomeStatus.success,
-        recipes: sorted,
-        currentSkip: 0,
-        hasMore: false,
-        isLoadingMore: false,
-        failure: null,
-        errorMessage: null,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.success,
+          recipes: sorted,
+          currentSkip: 0,
+          hasMore: false,
+          isLoadingMore: false,
+          failure: null,
+          errorMessage: null,
+        ),
+      );
     } catch (e) {
       final failure = mapExceptionToFailure(e);
-      emit(state.copyWith(
-        status: HomeStatus.error,
-        failure: failure,
-        errorMessage: failure.message,
-      ));
+      emit(
+        state.copyWith(
+          status: HomeStatus.error,
+          failure: failure,
+          errorMessage: failure.message,
+        ),
+      );
     }
   }
 
-  void _onSort(
-    SortRecipesEvent event,
-    Emitter<HomeState> emit,
-  ) {
+  void _onSort(SortRecipesEvent event, Emitter<HomeState> emit) {
     final sorted = _applySort(state.recipes, event.sortOption);
-    emit(state.copyWith(
-      selectedSort: event.sortOption,
-      recipes: sorted,
-    ));
+    emit(state.copyWith(selectedSort: event.sortOption, recipes: sorted));
   }
 
   Future<void> _onToggleFavorite(
@@ -316,13 +344,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       }
     }
     target ??= state.bestSellers.cast<RecipeModel?>().firstWhere(
-          (r) => r?.id == event.recipeId,
-          orElse: () => null,
-        );
+      (r) => r?.id == event.recipeId,
+      orElse: () => null,
+    );
     target ??= state.favorites.cast<RecipeModel?>().firstWhere(
-          (r) => r?.id == event.recipeId,
-          orElse: () => null,
-        );
+      (r) => r?.id == event.recipeId,
+      orElse: () => null,
+    );
 
     final updatedRecipes = state.recipes.map((r) {
       if (r.id == event.recipeId) {
@@ -347,11 +375,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       updatedFavorites.add(target.copyWith(isFavorite: true));
     }
 
-    emit(state.copyWith(
-      recipes: updatedRecipes,
-      bestSellers: updatedBestSellers,
-      favorites: updatedFavorites,
-    ));
+    emit(
+      state.copyWith(
+        recipes: updatedRecipes,
+        bestSellers: updatedBestSellers,
+        favorites: updatedFavorites,
+      ),
+    );
 
     await _saveFavoritesToStorage(updatedFavorites);
   }
@@ -360,14 +390,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     ClearFavoritesEvent event,
     Emitter<HomeState> emit,
   ) async {
-    final updatedRecipes = state.recipes.map((r) => r.copyWith(isFavorite: false)).toList();
-    final updatedBestSellers = state.bestSellers.map((r) => r.copyWith(isFavorite: false)).toList();
+    final updatedRecipes = state.recipes
+        .map((r) => r.copyWith(isFavorite: false))
+        .toList();
+    final updatedBestSellers = state.bestSellers
+        .map((r) => r.copyWith(isFavorite: false))
+        .toList();
 
-    emit(state.copyWith(
-      recipes: updatedRecipes,
-      bestSellers: updatedBestSellers,
-      favorites: const [],
-    ));
+    emit(
+      state.copyWith(
+        recipes: updatedRecipes,
+        bestSellers: updatedBestSellers,
+        favorites: const [],
+      ),
+    );
 
     await _saveFavoritesToStorage(const []);
   }
@@ -389,11 +425,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       return r.copyWith(isFavorite: isFav);
     }).toList();
 
-    emit(state.copyWith(
-      favorites: savedFavorites,
-      recipes: updatedRecipes,
-      bestSellers: updatedBestSellers,
-    ));
+    emit(
+      state.copyWith(
+        favorites: savedFavorites,
+        recipes: updatedRecipes,
+        bestSellers: updatedBestSellers,
+      ),
+    );
   }
 
   Future<void> _onSaveAndClearFavorites(
@@ -402,14 +440,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   ) async {
     await _saveFavoritesToStorage(state.favorites);
 
-    final clearedRecipes = state.recipes.map((r) => r.copyWith(isFavorite: false)).toList();
-    final clearedBestSellers = state.bestSellers.map((r) => r.copyWith(isFavorite: false)).toList();
+    final clearedRecipes = state.recipes
+        .map((r) => r.copyWith(isFavorite: false))
+        .toList();
+    final clearedBestSellers = state.bestSellers
+        .map((r) => r.copyWith(isFavorite: false))
+        .toList();
 
-    emit(state.copyWith(
-      favorites: const [],
-      recipes: clearedRecipes,
-      bestSellers: clearedBestSellers,
-    ));
+    emit(
+      state.copyWith(
+        favorites: const [],
+        recipes: clearedRecipes,
+        bestSellers: clearedBestSellers,
+      ),
+    );
 
     _activeUserId = null;
   }

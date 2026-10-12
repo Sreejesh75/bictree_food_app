@@ -13,7 +13,10 @@ class MockSecureStorageService extends SecureStorageService {
   @override
   Future<String?> getUserData() async => null;
   @override
-  Future<void> saveTokens({required String accessToken, String? refreshToken}) async {}
+  Future<void> saveTokens({
+    required String accessToken,
+    String? refreshToken,
+  }) async {}
   @override
   Future<void> saveUserData(String userJson) async {}
   @override
@@ -99,10 +102,12 @@ void main() {
     blocTest<AuthBloc, AuthState>(
       'emits [AuthLoadingState, AuthenticatedState] when LoginSubmittedEvent succeeds',
       build: () => authBloc,
-      act: (bloc) => bloc.add(const LoginSubmittedEvent(
-        usernameOrEmail: 'emilys',
-        password: 'emilyspass',
-      )),
+      act: (bloc) => bloc.add(
+        const LoginSubmittedEvent(
+          usernameOrEmail: 'emilys',
+          password: 'emilyspass',
+        ),
+      ),
       expect: () => [
         const AuthLoadingState(),
         const AuthenticatedState(
@@ -125,10 +130,9 @@ void main() {
         fakeRepo.shouldThrow = true;
         return authBloc;
       },
-      act: (bloc) => bloc.add(const LoginSubmittedEvent(
-        usernameOrEmail: 'wrong',
-        password: 'wrong',
-      )),
+      act: (bloc) => bloc.add(
+        const LoginSubmittedEvent(usernameOrEmail: 'wrong', password: 'wrong'),
+      ),
       expect: () => [
         const AuthLoadingState(),
         const AuthErrorState('Invalid credentials'),
@@ -139,10 +143,7 @@ void main() {
       'emits [AuthLoadingState, UnauthenticatedState] on LogoutRequestedEvent',
       build: () => authBloc,
       act: (bloc) => bloc.add(const LogoutRequestedEvent()),
-      expect: () => [
-        const AuthLoadingState(),
-        const UnauthenticatedState(),
-      ],
+      expect: () => [const AuthLoadingState(), const UnauthenticatedState()],
     );
   });
 }

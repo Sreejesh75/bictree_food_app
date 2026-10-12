@@ -18,15 +18,9 @@ import 'support_concierge_sheet.dart';
 class ProfileSheet extends StatelessWidget {
   final AuthUser user;
 
-  const ProfileSheet({
-    super.key,
-    required this.user,
-  });
+  const ProfileSheet({super.key, required this.user});
 
-  static Future<void> show(
-    BuildContext context, {
-    required AuthUser user,
-  }) {
+  static Future<void> show(BuildContext context, {required AuthUser user}) {
     return showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -36,7 +30,9 @@ class ProfileSheet extends StatelessWidget {
   }
 
   String _getInitials() {
-    final first = user.firstName.isNotEmpty ? user.firstName[0].toUpperCase() : '';
+    final first = user.firstName.isNotEmpty
+        ? user.firstName[0].toUpperCase()
+        : '';
     final last = user.lastName.isNotEmpty ? user.lastName[0].toUpperCase() : '';
     if (first.isEmpty && last.isEmpty) {
       return user.username.isNotEmpty ? user.username[0].toUpperCase() : 'U';
@@ -57,7 +53,11 @@ class ProfileSheet extends StatelessWidget {
                 color: const Color(0xFFFFEBEE),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: const Icon(Icons.logout_rounded, color: Color(0xFFD32F2F), size: 22),
+              child: const Icon(
+                Icons.logout_rounded,
+                color: Color(0xFFD32F2F),
+                size: 22,
+              ),
             ),
             const SizedBox(width: 12),
             const Text(
@@ -77,7 +77,11 @@ class ProfileSheet extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Your active cart items and saved favorites will be preserved locally on this device. When you sign in again with the same credentials, all your items will be automatically restored.',
-              style: TextStyle(fontSize: 13, color: Colors.grey[700], height: 1.4),
+              style: TextStyle(
+                fontSize: 13,
+                color: Colors.grey[700],
+                height: 1.4,
+              ),
             ),
           ],
         ),
@@ -86,27 +90,32 @@ class ProfileSheet extends StatelessWidget {
             onPressed: () => Navigator.pop(dialogCtx),
             child: Text(
               'Cancel',
-              style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w600),
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.pop(dialogCtx); // Close confirm dialog
-              Navigator.pop(context); // Close profile sheet
+              Navigator.pop(dialogCtx);
+              Navigator.pop(context);
 
-              // 1. Save and clear Cart for current user
               context.read<CartBloc>().add(const SaveAndClearCartEvent());
 
-              // 2. Save and clear Favorites for current user
               context.read<HomeBloc>().add(const SaveAndClearFavoritesEvent());
 
-              // 3. Dispatch logout event
               context.read<AuthBloc>().add(const LogoutRequestedEvent());
 
               UIHelpers.showTimedSnackBar(
                 context,
-                message: 'Cart and favorites saved for @${user.username}. Signed out.',
-                icon: const Icon(Icons.check_circle_rounded, color: Color(0xFF4CAF50), size: 20),
+                message:
+                    'Cart and favorites saved for @${user.username}. Signed out.',
+                icon: const Icon(
+                  Icons.check_circle_rounded,
+                  color: Color(0xFF4CAF50),
+                  size: 20,
+                ),
                 duration: const Duration(seconds: 3),
                 progressColor: AppColors.primaryOrange,
               );
@@ -114,11 +123,16 @@ class ProfileSheet extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFD32F2F),
               elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             child: const Text(
               'Sign Out',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
@@ -148,7 +162,6 @@ class ProfileSheet extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Top Navigation Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -186,7 +199,10 @@ class ProfileSheet extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 5,
+                    ),
                     decoration: BoxDecoration(
                       gradient: const LinearGradient(
                         colors: [Color(0xFFFFF3E0), Color(0xFFFFE0B2)],
@@ -208,7 +224,6 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 18),
 
-              // Avatar
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -226,13 +241,18 @@ class ProfileSheet extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       gradient: const LinearGradient(
-                        colors: [AppColors.headerYellow, AppColors.primaryOrange],
+                        colors: [
+                          AppColors.headerYellow,
+                          AppColors.primaryOrange,
+                        ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: AppColors.primaryOrange.withValues(alpha: 0.35),
+                          color: AppColors.primaryOrange.withValues(
+                            alpha: 0.35,
+                          ),
                           blurRadius: 18,
                           offset: const Offset(0, 6),
                         ),
@@ -253,7 +273,6 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 14),
 
-              // Full Name
               Text(
                 user.fullName,
                 style: AppTextStyles.screenHeading.copyWith(
@@ -263,7 +282,6 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 4),
 
-              // Username & Email
               Text(
                 '@${user.username} • ${user.email}',
                 style: TextStyle(
@@ -274,7 +292,6 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Dynamic Stats Cards
               Row(
                 children: [
                   Expanded(
@@ -308,9 +325,11 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 18),
 
-              // Account Information Card
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFFF9F9FB),
                   borderRadius: BorderRadius.circular(18),
@@ -346,7 +365,6 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 16),
 
-              // Quick Action Links
               _buildActionLink(
                 icon: Icons.receipt_long_rounded,
                 title: 'Order History & Tracking',
@@ -366,7 +384,6 @@ class ProfileSheet extends StatelessWidget {
               ),
               const SizedBox(height: 22),
 
-              // Sign Out Button
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -374,7 +391,10 @@ class ProfileSheet extends StatelessWidget {
                   onPressed: () => _confirmSignOut(context),
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xFFFFF5F5),
-                    side: const BorderSide(color: Color(0xFFFFCDD2), width: 1.2),
+                    side: const BorderSide(
+                      color: Color(0xFFFFCDD2),
+                      width: 1.2,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -382,7 +402,11 @@ class ProfileSheet extends StatelessWidget {
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.logout_rounded, color: Color(0xFFD32F2F), size: 20),
+                      Icon(
+                        Icons.logout_rounded,
+                        color: Color(0xFFD32F2F),
+                        size: 20,
+                      ),
                       SizedBox(width: 8),
                       Text(
                         'Sign Out of Account',
@@ -443,10 +467,7 @@ class ProfileSheet extends StatelessWidget {
                 ),
                 Text(
                   subtitle,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -518,7 +539,11 @@ class ProfileSheet extends StatelessWidget {
                 ),
               ),
             ),
-            const Icon(Icons.arrow_forward_ios_rounded, size: 14, color: Colors.grey),
+            const Icon(
+              Icons.arrow_forward_ios_rounded,
+              size: 14,
+              color: Colors.grey,
+            ),
           ],
         ),
       ),
