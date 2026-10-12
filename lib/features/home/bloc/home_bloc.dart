@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/errors/failures.dart';
 import '../models/recipe_model.dart';
 import '../repository/recipe_repository.dart';
 import 'home_event.dart';
@@ -81,7 +82,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     if (event.userId != null) {
       _activeUserId = event.userId;
     }
-    emit(state.copyWith(status: HomeStatus.loading, errorMessage: null));
+    emit(state.copyWith(
+      status: HomeStatus.loading,
+      errorMessage: null,
+      failure: null,
+    ));
     try {
       final savedFavorites = await _loadFavoritesFromStorage();
       final result = await repository.getRecipes(
@@ -109,11 +114,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         currentSkip: 0,
         hasMore: result.hasMore,
         isLoadingMore: false,
+        isOffline: result.isFromCache,
+        isFromCache: result.isFromCache,
+        failure: null,
+        errorMessage: null,
       ));
     } catch (e) {
+      final failure = mapExceptionToFailure(e);
       emit(state.copyWith(
         status: HomeStatus.error,
-        errorMessage: e.toString().replaceAll('Exception: ', ''),
+        failure: failure,
+        errorMessage: failure.message,
+        isOffline: failure is NetworkFailure,
       ));
     }
   }
@@ -149,10 +161,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         currentSkip: 0,
         hasMore: result.hasMore,
         isLoadingMore: false,
+        isOffline: result.isFromCache,
+        isFromCache: result.isFromCache,
+        failure: null,
+        errorMessage: null,
       ));
     } catch (e) {
+      final failure = mapExceptionToFailure(e);
       emit(state.copyWith(
-        errorMessage: e.toString().replaceAll('Exception: ', ''),
+        failure: failure,
+        errorMessage: failure.message,
+        isOffline: failure is NetworkFailure,
       ));
     }
   }
@@ -231,9 +250,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         isLoadingMore: false,
       ));
     } catch (e) {
+      final failure = mapExceptionToFailure(e);
       emit(state.copyWith(
         status: HomeStatus.error,
-        errorMessage: e.toString().replaceAll('Exception: ', ''),
+        failure: failure,
+        errorMessage: failure.message,
       ));
     }
   }
@@ -259,11 +280,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         currentSkip: 0,
         hasMore: false,
         isLoadingMore: false,
+        failure: null,
+        errorMessage: null,
       ));
     } catch (e) {
+      final failure = mapExceptionToFailure(e);
       emit(state.copyWith(
         status: HomeStatus.error,
-        errorMessage: e.toString().replaceAll('Exception: ', ''),
+        failure: failure,
+        errorMessage: failure.message,
       ));
     }
   }

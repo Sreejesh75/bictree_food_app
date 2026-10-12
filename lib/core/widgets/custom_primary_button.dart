@@ -81,11 +81,15 @@ class CustomPrimaryButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    text,
-                    style: AppTextStyles.primaryButton.copyWith(
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.4,
+                  Flexible(
+                    child: Text(
+                      text,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.primaryButton.copyWith(
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
+                      ),
                     ),
                   ),
                   if (icon != null) ...[

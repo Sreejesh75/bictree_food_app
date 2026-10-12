@@ -6,7 +6,6 @@ import '../../../core/constants/app_dimensions.dart';
 import '../../../core/constants/app_text_styles.dart';
 import '../../../core/utils/ui_helpers.dart';
 import '../../../core/widgets/curved_bottom_nav_bar.dart';
-import '../../../core/widgets/custom_primary_button.dart';
 import '../../auth/bloc/auth_bloc.dart';
 import '../../auth/bloc/auth_state.dart';
 import '../../auth/models/auth_user.dart';
@@ -25,6 +24,9 @@ import '../widgets/best_seller_section.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/home_header.dart';
 import '../../auth/screens/login_screen.dart';
+import '../widgets/friendly_empty_view.dart';
+import '../widgets/friendly_error_view.dart';
+import '../widgets/offline_banner.dart';
 import '../widgets/order_history_sheet.dart';
 import '../widgets/profile_sheet.dart';
 import '../widgets/recipe_card.dart';
@@ -252,35 +254,12 @@ class _HomeViewState extends State<_HomeView> {
                     }
 
                     if (state.status == HomeStatus.error && state.recipes.isEmpty) {
-                      return Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Icon(
-                                Icons.wifi_off_rounded,
-                                size: 56,
-                                color: Color(0xFFD24B1B),
-                              ),
-                              const SizedBox(height: 14),
-                              Text(
-                                state.errorMessage ?? 'Unable to connect to food catalog',
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.inputText.copyWith(fontSize: 14.5),
-                              ),
-                              const SizedBox(height: 18),
-                              CustomPrimaryButton(
-                                text: 'Try Again',
-                                width: 140,
-                                height: 42,
-                                onPressed: () {
-                                  context.read<HomeBloc>().add(const FetchInitialRecipesEvent());
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
+                      return FriendlyErrorView(
+                        failure: state.failure,
+                        errorMessage: state.errorMessage,
+                        onRetry: () {
+                          context.read<HomeBloc>().add(const FetchInitialRecipesEvent());
+                        },
                       );
                     }
 
@@ -297,6 +276,17 @@ class _HomeViewState extends State<_HomeView> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Visible Offline Banner when offline & showing cached items
+                            if (state.isOffline) ...[
+                              OfflineBanner(
+                                cachedItemsCount: state.recipes.length,
+                                onRetry: () {
+                                  context.read<HomeBloc>().add(const RefreshRecipesEvent());
+                                },
+                              ),
+                              const SizedBox(height: 8.0),
+                            ],
+
                             CategoryChips(
                               selectedCategory: state.selectedCategory,
                               onCategorySelected: (cat) {
@@ -372,13 +362,16 @@ class _HomeViewState extends State<_HomeView> {
                             const SizedBox(height: 14.0),
 
                             if (state.recipes.isEmpty)
-                              Container(
-                                padding: const EdgeInsets.symmetric(vertical: 40),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  'No recipes found for "${state.searchQuery}".',
-                                  style: AppTextStyles.bodySubtitle.copyWith(fontSize: 14),
-                                ),
+                              FriendlyEmptyView(
+                                searchQuery: state.searchQuery,
+                                category: state.selectedCategory,
+                                onClearSearch: () {
+                                  context.read<HomeBloc>().add(const SearchRecipesEvent(''));
+                                  context.read<HomeBloc>().add(const SelectCategoryEvent('All'));
+                                },
+                                onSuggestionTap: (suggestion) {
+                                  context.read<HomeBloc>().add(SearchRecipesEvent(suggestion));
+                                },
                               )
                             else
                               GridView.builder(

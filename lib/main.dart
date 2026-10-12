@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 import 'core/constants/app_strings.dart';
 import 'core/storage/secure_storage_service.dart';
@@ -27,6 +28,10 @@ void main() async {
 
   final secureStorage = SecureStorageService();
   final authRepository = AuthRepository(storageService: secureStorage);
+
+  try {
+    await Hive.initFlutter();
+  } catch (_) {}
 
   runApp(
     BictreeFoodApp(authRepository: authRepository),

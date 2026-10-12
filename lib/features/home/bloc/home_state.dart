@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../../core/errors/failures.dart';
 import '../models/recipe_model.dart';
 import 'home_event.dart';
 
@@ -16,6 +17,9 @@ class HomeState extends Equatable {
   final bool hasMore;
   final int currentSkip;
   final String? errorMessage;
+  final bool isOffline;
+  final Failure? failure;
+  final bool isFromCache;
 
   const HomeState({
     this.status = HomeStatus.initial,
@@ -29,6 +33,9 @@ class HomeState extends Equatable {
     this.hasMore = true,
     this.currentSkip = 0,
     this.errorMessage,
+    this.isOffline = false,
+    this.failure,
+    this.isFromCache = false,
   });
 
   int get totalFavoritesCount => favorites.length;
@@ -45,6 +52,9 @@ class HomeState extends Equatable {
     bool? hasMore,
     int? currentSkip,
     String? errorMessage,
+    bool? isOffline,
+    Failure? failure,
+    bool? isFromCache,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -58,6 +68,9 @@ class HomeState extends Equatable {
       hasMore: hasMore ?? this.hasMore,
       currentSkip: currentSkip ?? this.currentSkip,
       errorMessage: errorMessage ?? this.errorMessage,
+      isOffline: isOffline ?? this.isOffline,
+      failure: failure ?? this.failure,
+      isFromCache: isFromCache ?? this.isFromCache,
     );
   }
 
@@ -74,5 +87,8 @@ class HomeState extends Equatable {
         hasMore,
         currentSkip,
         errorMessage,
+        isOffline,
+        failure,
+        isFromCache,
       ];
 }
