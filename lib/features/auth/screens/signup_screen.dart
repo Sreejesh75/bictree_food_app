@@ -15,6 +15,7 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import '../../home/screens/home_screen.dart';
+import '../../../core/router/app_router.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -108,12 +109,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
           if (state.successMessage != null) {
             UIHelpers.showSnackBar(context, message: state.successMessage!);
           }
-          Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (_) => HomeScreen(user: state.user),
-            ),
-            (route) => false,
-          );
+          if (GoRouter.maybeOf(context) != null) {
+            context.go(AppRoutes.home, extra: state.user);
+          } else {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (_) => HomeScreen(user: state.user),
+              ),
+              (route) => false,
+            );
+          }
         }
       },
       builder: (context, state) {

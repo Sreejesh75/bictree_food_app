@@ -16,6 +16,7 @@ import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
 import 'signup_screen.dart';
 import '../../home/screens/home_screen.dart';
+import '../../../core/router/app_router.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,10 +34,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // Pre-populate with valid DummyJSON test credentials for instant testing
-    _usernameController = TextEditingController(text: 'emilys');
-    _passwordController = TextEditingController(text: 'emilyspass');
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
   }
+
 
   @override
   void dispose() {
@@ -74,11 +75,15 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state.successMessage != null) {
             UIHelpers.showSnackBar(context, message: state.successMessage!);
           }
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (_) => HomeScreen(user: state.user),
-            ),
-          );
+          if (GoRouter.maybeOf(context) != null) {
+            context.go(AppRoutes.home, extra: state.user);
+          } else {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => HomeScreen(user: state.user),
+              ),
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -442,11 +447,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) => const SignUpScreen(),
-                                          ),
-                                        );
+                                        if (GoRouter.maybeOf(context) != null) {
+                                          context.push(AppRoutes.signup);
+                                        } else {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) => const SignUpScreen(),
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: Text(
                                         AppStrings.signUp,

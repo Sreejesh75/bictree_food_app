@@ -14,6 +14,7 @@ import '../widgets/recipe_detail_bottom_bar.dart';
 import '../widgets/recipe_detail_info_capsules.dart';
 import '../widgets/recipe_detail_ingredients.dart';
 import '../widgets/recipe_detail_instructions.dart';
+import '../../../core/router/app_router.dart';
 
 class RecipeDetailScreen extends StatefulWidget {
   final RecipeModel recipe;
@@ -75,11 +76,16 @@ class _RecipeDetailScreenState extends State<RecipeDetailScreen> {
       duration: const Duration(seconds: 3),
       progressColor: AppColors.primaryOrange,
       onAction: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CartScreen()),
-        );
+        if (GoRouter.maybeOf(context) != null) {
+          context.push(AppRoutes.cart);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const CartScreen()),
+          );
+        }
       },
+
     );
   }
 

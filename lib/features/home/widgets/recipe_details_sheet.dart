@@ -9,6 +9,7 @@ import '../../cart/bloc/cart_event.dart';
 import '../../cart/screens/cart_screen.dart';
 import '../models/recipe_model.dart';
 import '../screens/recipe_detail_screen.dart';
+import '../../../core/router/app_router.dart';
 
 class RecipeDetailsSheet extends StatefulWidget {
   final RecipeModel recipe;
@@ -73,10 +74,14 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
       duration: const Duration(seconds: 3),
       progressColor: AppColors.primaryOrange,
       onAction: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CartScreen()),
-        );
+        if (GoRouter.maybeOf(context) != null) {
+          context.push(AppRoutes.cart);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const CartScreen()),
+          );
+        }
       },
     );
   }
@@ -168,15 +173,25 @@ class _RecipeDetailsSheetState extends State<RecipeDetailsSheet> {
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RecipeDetailScreen(
-                          recipe: widget.recipe,
-                          heroTag: widget.heroTag,
+                    if (GoRouter.maybeOf(context) != null) {
+                      context.push(
+                        AppRoutes.recipeDetail,
+                        extra: {
+                          'recipe': widget.recipe,
+                          'heroTag': widget.heroTag,
+                        },
+                      );
+                    } else {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => RecipeDetailScreen(
+                            recipe: widget.recipe,
+                            heroTag: widget.heroTag,
+                          ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   child: const Text(
                     'Full Details →',

@@ -23,6 +23,7 @@ import '../widgets/banner_carousel.dart';
 import '../widgets/best_seller_section.dart';
 import '../widgets/category_chips.dart';
 import '../widgets/home_header.dart';
+import '../../../core/router/app_router.dart';
 import '../../auth/screens/login_screen.dart';
 import '../widgets/friendly_empty_view.dart';
 import '../widgets/friendly_error_view.dart';
@@ -104,46 +105,66 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   void _openRecipeDetail(RecipeModel recipe, String heroTag) {
-    final homeBloc = context.read<HomeBloc>();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: homeBloc,
-          child: RecipeDetailScreen(
-            recipe: recipe,
-            heroTag: heroTag,
+    if (GoRouter.maybeOf(context) != null) {
+      context.push(
+        AppRoutes.recipeDetail,
+        extra: {'recipe': recipe, 'heroTag': heroTag},
+      );
+    } else {
+      final homeBloc = context.read<HomeBloc>();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: homeBloc,
+            child: RecipeDetailScreen(
+              recipe: recipe,
+              heroTag: heroTag,
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
   }
 
   void _openCart() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const CartScreen(),
-      ),
-    ).then((_) {
-      if (mounted) setState(() => _bottomNavIndex = 0);
-    });
+    if (GoRouter.maybeOf(context) != null) {
+      context.push(AppRoutes.cart).then((_) {
+        if (mounted) setState(() => _bottomNavIndex = 0);
+      });
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const CartScreen(),
+        ),
+      ).then((_) {
+        if (mounted) setState(() => _bottomNavIndex = 0);
+      });
+    }
   }
 
   void _openFavorites() {
-    final homeBloc = context.read<HomeBloc>();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => BlocProvider.value(
-          value: homeBloc,
-          child: const FavoritesScreen(),
+    if (GoRouter.maybeOf(context) != null) {
+      context.push(AppRoutes.favorites).then((_) {
+        if (mounted) setState(() => _bottomNavIndex = 0);
+      });
+    } else {
+      final homeBloc = context.read<HomeBloc>();
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: homeBloc,
+            child: const FavoritesScreen(),
+          ),
         ),
-      ),
-    ).then((_) {
-      if (mounted) setState(() => _bottomNavIndex = 0);
-    });
+      ).then((_) {
+        if (mounted) setState(() => _bottomNavIndex = 0);
+      });
+    }
   }
+
 
   void _showSortSheet(BuildContext context) {
     final currentSort = context.read<HomeBloc>().state.selectedSort;
@@ -205,73 +226,88 @@ class _HomeViewState extends State<_HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.headerYellow,
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, authState) {
           if (authState is UnauthenticatedState) {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (_) => const LoginScreen()),
-              (route) => false,
-            );
+            if (GoRouter.maybeOf(context) != null) {
+              context.go(AppRoutes.login);
+            } else {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
+                (route) => false,
+              );
+            }
           }
         },
-        child: Column(
-          children: [
-            BlocBuilder<CartBloc, CartState>(
-              builder: (context, cartState) {
-                return HomeHeader(
-                  user: widget.user,
-                  cartCount: cartState.totalItemCount,
-                  onSearchChanged: (query) {
-                    context.read<HomeBloc>().add(SearchRecipesEvent(query));
-                  },
-                  onFilterTap: () => _showSortSheet(context),
-                  onCartTap: _openCart,
-                  onNotificationTap: () => UIHelpers.showSnackBar(
-                    context,
-                    message: 'No new notifications',
-                  ),
-                  onProfileTap: _openProfile,
-                );
-              },
-            ),
-            Expanded(
-              child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(AppDimensions.radiusXL),
-                  ),
-                ),
-                child: BlocBuilder<HomeBloc, HomeState>(
-                  builder: (context, state) {
-                    if (state.status == HomeStatus.loading && state.recipes.isEmpty) {
-                      return const SingleChildScrollView(
-                        padding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
-                        child: RecipeShimmer(),
-                      );
-                    }
 
-                    if (state.status == HomeStatus.error && state.recipes.isEmpty) {
-                      return FriendlyErrorView(
-                        failure: state.failure,
-                        errorMessage: state.errorMessage,
-                        onRetry: () {
-                          context.read<HomeBloc>().add(const FetchInitialRecipesEvent());
-                        },
-                      );
-                    }
-
-                    return RefreshIndicator(
-                      color: AppColors.primaryOrange,
-                      onRefresh: () async {
-                        context.read<HomeBloc>().add(const RefreshRecipesEvent());
-                        await Future.delayed(const Duration(milliseconds: 600));
+        child: RefreshIndicator(
+          color: AppColors.primaryOrange,
+          onRefresh: () async {
+            context.read<HomeBloc>().add(const RefreshRecipesEvent());
+            await Future.delayed(const Duration(milliseconds: 600));
+          },
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Top Header Section (scrolls smoothly with page content)
+                BlocBuilder<CartBloc, CartState>(
+                  builder: (context, cartState) {
+                    return HomeHeader(
+                      user: widget.user,
+                      cartCount: cartState.totalItemCount,
+                      onSearchChanged: (query) {
+                        context.read<HomeBloc>().add(SearchRecipesEvent(query));
                       },
-                      child: SingleChildScrollView(
-                        controller: _scrollController,
-                        physics: const AlwaysScrollableScrollPhysics(),
+                      onFilterTap: () => _showSortSheet(context),
+                      onCartTap: _openCart,
+                      onNotificationTap: () => UIHelpers.showSnackBar(
+                        context,
+                        message: 'No new notifications',
+                      ),
+                      onProfileTap: _openProfile,
+                    );
+                  },
+                ),
+
+                // Main Content Card with rounded top corners
+                Container(
+                  width: double.infinity,
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height - 160,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(AppDimensions.radiusXL),
+                    ),
+                  ),
+                  child: BlocBuilder<HomeBloc, HomeState>(
+                    builder: (context, state) {
+                      if (state.status == HomeStatus.loading && state.recipes.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 20.0),
+                          child: RecipeShimmer(),
+                        );
+                      }
+
+                      if (state.status == HomeStatus.error && state.recipes.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(18.0, 20.0, 18.0, 40.0),
+                          child: FriendlyErrorView(
+                            failure: state.failure,
+                            errorMessage: state.errorMessage,
+                            onRetry: () {
+                              context.read<HomeBloc>().add(const FetchInitialRecipesEvent());
+                            },
+                          ),
+                        );
+                      }
+
+                      return Padding(
                         padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 20.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -413,15 +449,16 @@ class _HomeViewState extends State<_HomeView> {
                                   ),
                                 ),
                               ),
+                            const SizedBox(height: 80.0),
                           ],
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
       bottomNavigationBar: CurvedBottomNavBar(

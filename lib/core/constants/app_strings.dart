@@ -15,9 +15,9 @@ class AppStrings {
   static const String welcomeSubtitle =
       'Sign in to explore delicious food, discover top nearby restaurants, and get your favorite meals delivered fast.';
   static const String emailOrMobileLabel = 'Email or Username';
-  static const String emailOrMobileHint = 'emilys or email@example.com';
+  static const String emailOrMobileHint = 'example@example.com';
   static const String passwordLabel = 'Password';
-  static const String passwordHint = '************';
+  static const String passwordHint = '••••••••';
   static const String dontHaveAccount = "Don't have an account? ";
 
   // Sign Up Screen

@@ -13,6 +13,7 @@ import '../../home/models/recipe_model.dart';
 import '../../home/screens/recipe_detail_screen.dart';
 import '../widgets/favorite_item_card.dart';
 import '../widgets/favorites_empty_view.dart';
+import '../../../core/router/app_router.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -67,10 +68,14 @@ class FavoritesScreen extends StatelessWidget {
       progressColor: AppColors.primaryOrange,
       duration: const Duration(seconds: 3),
       onAction: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CartScreen()),
-        );
+        if (GoRouter.maybeOf(context) != null) {
+          context.push(AppRoutes.cart);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const CartScreen()),
+          );
+        }
       },
     );
   }
@@ -182,19 +187,29 @@ class FavoritesScreen extends StatelessWidget {
                 return FavoriteItemCard(
                   recipe: recipe,
                   onTap: () {
-                    final homeBloc = context.read<HomeBloc>();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: homeBloc,
-                          child: RecipeDetailScreen(
-                            recipe: recipe,
-                            heroTag: 'fav_${recipe.id}',
+                    if (GoRouter.maybeOf(context) != null) {
+                      context.push(
+                        AppRoutes.recipeDetail,
+                        extra: {
+                          'recipe': recipe,
+                          'heroTag': 'fav_${recipe.id}',
+                        },
+                      );
+                    } else {
+                      final homeBloc = context.read<HomeBloc>();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                            value: homeBloc,
+                            child: RecipeDetailScreen(
+                              recipe: recipe,
+                              heroTag: 'fav_${recipe.id}',
+                            ),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   },
                   onToggleFavorite: () => _removeFavoriteWithUndo(context, recipe),
                   onAddToCart: () => _addToCart(context, recipe),
